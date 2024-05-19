@@ -42,7 +42,6 @@ export function signOut() {
     try {
         destroyCookie(undefined, '@d&d.token')
         Router.push('/')
-
     } catch {
         console.log('erro ao deslogar')
 

@@ -123,7 +123,7 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
     const apiClient = setupAPIClient(ctx);
     const response = await apiClient.get('/me')
     const charList = await apiClient.get('/char/list')
-    console.log(charList.data);
+    //console.log(charList.data);
 
 
     return {
