@@ -1,0 +1,33 @@
+.containerCard {
+    width: 80%;
+    height: 40px;
+    padding: 0 15px;
+    border: 2px solid var(--color-text);
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.4rem 0;
+    transition: all 0.5s;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.1);
+        height: 180px;
+    }
+
+    button {
+        border: 0;
+        background: transparent;
+        color: var(--color-text);
+        transition: all 0.5s;
+
+        &:hover {
+            color: var(--vermelhoLaranja);
+            transform: scale(1.2);
+        }
+
+
+    }
+
+}

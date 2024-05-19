@@ -1,0 +1,15 @@
+.input {
+    margin-bottom: 1rem;
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-bottom: 2px solid #fff;
+    background-color: transparent;
+    color: #fff;
+
+
+}
+
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.8)
+}

@@ -1,0 +1,33 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MPL-2.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/react-select": "^5.0.1",
+    "axios": "^1.6.8",
+    "git-filter-repo": "^0.0.30",
+    "jwt-decode": "^4.0.0",
+    "next": "14.2.3",
+    "next-google-fonts": "^2.2.0",
+    "nookies": "^2.5.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-icons": "^5.2.1",
+    "react-select": "^5.8.0",
+    "react-toastify": "^10.0.5",
+    "sass": "^1.77.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}
