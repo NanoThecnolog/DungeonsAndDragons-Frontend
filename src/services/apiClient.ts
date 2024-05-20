@@ -6,4 +6,4 @@ const ctx: GetServerSidePropsContext = {
     query: {} as any,
     resolvedUrl: '',
 };
-export const api = setupAPIClient(ctx);
+export const api = setupAPIClient();
