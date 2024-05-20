@@ -1,3 +1,9 @@
 import { setupAPIClient } from "./api";
-
-export const api = setupAPIClient();
+import { GetServerSidePropsContext } from "next";
+const ctx: GetServerSidePropsContext = {
+    req: {} as any,
+    res: {} as any,
+    query: {} as any,
+    resolvedUrl: '',
+};
+export const api = setupAPIClient(ctx);
