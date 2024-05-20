@@ -19,6 +19,7 @@ type UserProps = {
     id: string;
     name: string;
     email: string;
+    avatar: string | null;
 }
 
 type SignInProps = {
@@ -50,7 +51,7 @@ export function signOut() {
 
 export function AuthProvider({ children }: AuthProviderProps) {
 
-    const [user, setUser] = useState<UserProps>({ id: '', name: '', email: '' })
+    const [user, setUser] = useState<UserProps>({ id: '', name: '', email: '', avatar: null })
     const isAuthenticated = !!user;
 
     useEffect(() => {
@@ -58,18 +59,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (token) {
             api.get('/me').then(response => {
-                const { id, name, email } = response.data;
+                const { id, name, email, avatar } = response.data;
 
                 setUser({
                     id,
                     name,
-                    email
+                    email,
+                    avatar
                 })
+            }).catch(() => {
+                //deslog do usuario em caso de erro.
+                signOut();
             })
-                .catch(() => {
-                    //deslog do usuario em caso de erro.
-                    signOut();
-                })
         }
     }, [])
 
@@ -92,6 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 id,
                 name,
                 email,
+                avatar: null,
             })
 
             //passando o token para outras requisições
