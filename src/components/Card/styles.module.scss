@@ -10,6 +10,8 @@
     margin: 0.4rem 0;
     transition: all 0.5s;
     cursor: pointer;
+    background-size: cover;
+    background-position: center;
 
     &:hover {
         transform: scale(1.1);
@@ -30,4 +32,13 @@
 
     }
 
+}
+
+.class {
+    display: flex;
+
+
+    p {
+        margin: 0 0.2rem;
+    }
 }

@@ -35,6 +35,7 @@ type CharProps = {
     title: string | null;
     race: string;
     char_class: ClassProps[];
+    image: string | null;
 }
 
 interface HomeProps {
@@ -50,6 +51,8 @@ export default function Dashboard({ user, charList }: HomeProps) {
     const [avatar, setAvatar] = useState(user.avatar);
 
     const [char, setChar] = useState(charList || []);
+
+    const [charLimit, setCharLimit] = useState('5');
 
     return (
         <>
@@ -80,7 +83,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
                             </div>
                             <div className={styles.data}>
                                 <p>Personagens:</p>
-                                <p>0/5</p>
+                                <p>{char.length}/{charLimit}</p>
                             </div>
                             <div className={styles.avatar}>
                                 {avatar ? avatar : "sem avatar"}
@@ -106,6 +109,8 @@ export default function Dashboard({ user, charList }: HomeProps) {
                                 race={item.race}
                                 title={item.title}
                                 char_class={item.char_class}
+                                image={item.image}
+
 
                             />
                         ))}

@@ -12,15 +12,20 @@ interface CharProps {
     title: string | null;
     race: string;
     char_class: ClassProps[];
+    image: string | null;
 }
-export default function Card({ name, title, race, char_class }: CharProps) {
+export default function Card({ name, title, race, char_class, image }: CharProps) {
     return (
         <>
-            <div className={styles.containerCard}>
-                <h3 className={styles.textName}>{name}</h3>
-                <p>{title}</p>
+            <div className={styles.containerCard} style={{ backgroundImage: `url(${image})` }}>
+                <div>
+                    <h3 className={styles.textName}>{name}</h3>
+                    {title && (
+                        <p>{title}</p>
+                    )}
+                </div>
                 {char_class.map(item => (
-                    <div key={item.id}>
+                    <div key={item.id} className={styles.class}>
                         <p>{item.name}</p>
                         <p>{item.level}</p>
                     </div>

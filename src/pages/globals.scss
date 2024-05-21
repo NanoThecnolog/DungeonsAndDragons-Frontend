@@ -25,6 +25,10 @@ body {
 
 }
 
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+
 :root {
   --color-text: #252525;
   --color-placeholder: #8a8a8a;
@@ -90,7 +94,7 @@ a {
     --color-text: #e9e9e9;
     --color-placeholder: #c7c7c7;
     --backgroundColor: #1d1d2e;
-    --inputBackground: #24193a;
+    --inputBackground: #302ec5;
 
   }
 }
