@@ -101,19 +101,18 @@ export default function New_Char({ classes, races, user }: CharProps) {
 
 
 
-            const charClass = [
-                {
-                    level: classLevel,
-                    name: classSelected
-                }
-            ]
+            const charClass = {
+                level: classLevel,
+                name: classSelected
+            }
+
 
 
 
             console.log(charClass)
 
             data.append('name', name);
-            data.append('char_class', JSON.stringify(charClass[0]))
+            data.append('char_class', JSON.stringify(charClass))
             data.append('race', racesList[raceLength].name)
             data.append('image', imageFile)
             // data.append('userId', userId)
