@@ -11,6 +11,7 @@ import { toast } from "react-toastify"
 import { setupAPIClientExternal } from "@/services/apiD&D/apiExternal"
 import { setupAPIClient } from "@/services/api"
 
+
 import styles from './styles.module.scss'
 
 type UserProps = {
@@ -18,8 +19,8 @@ type UserProps = {
     name: string;
     email: string;
     avatar: string | null;
-}
 
+}
 
 type DataProps = {
     index: string;
@@ -52,7 +53,7 @@ export default function New_Char({ classes, races, user }: CharProps) {
     console.log(user)
 
 
-    //const [userId, setUserId] = useState(user.name)
+    const [userId, setUserId] = useState(user)
 
 
     function handleFile(e: ChangeEvent<HTMLInputElement>) {

@@ -97,7 +97,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
                         <div className={styles.charList}>
                             <h2>Jogar</h2>
                             <Link href="/new_char">
-                                <button title="Criar Personagem!">
+                                <button type="button" title="Criar Personagem!">
                                     <FaPlusCircle size={20} />
                                 </button>
                             </Link>
@@ -110,6 +110,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
                                 title={item.title}
                                 char_class={item.char_class}
                                 image={item.image}
+                            //user={item.id}
 
 
                             />

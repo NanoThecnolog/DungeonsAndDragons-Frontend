@@ -30,7 +30,7 @@ export default function Card({ name, title, race, char_class, image }: CharProps
                         <p>{item.level}</p>
                     </div>
                 ))}
-                <button title="excluir personagem">
+                <button type='button' title="excluir personagem">
                     <FaTrash size={20} />
                 </button>
             </div>

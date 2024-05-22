@@ -13,6 +13,13 @@ type AuthContextData = {
     signIn: (credentials: SignInProps) => Promise<void>;
     signOut: () => void;
     signUp: (credentials: SignUpProps) => Promise<void>;
+    isPlaying: boolean;
+    volume: number;
+    togglePlayPause: () => void;
+    setVolume: (volume: number) => void;
+    currentTrack: string;
+    nextTrack: () => void;
+
 }
 
 type UserProps = {
@@ -49,10 +56,30 @@ export function signOut() {
     }
 }
 
+
+
 export function AuthProvider({ children }: AuthProviderProps) {
 
     const [user, setUser] = useState<UserProps>({ id: '', name: '', email: '', avatar: null })
     const isAuthenticated = !!user;
+
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [volume, setVolume] = useState(0.5);
+    const [currentTrack, setCurrentTrack] = useState('./Morrowind-soundtrack.mp3')
+
+    const tracks = [
+        './Morrowind-soundtrack.mp3',
+        './The-Dragonborn-comes.mp3',
+        './Dragonborn.mp3',
+        './Awake.mp3',
+        './Queen-of-lost-world.mp3'
+    ];
+    const nextTrack = () => {
+        const randomIndex = Math.floor(Math.random() * tracks.length);
+        //console.log("proxima track");
+        setCurrentTrack(tracks[randomIndex]);
+    }
+
 
     useEffect(() => {
         const { '@d&d.token': token } = parseCookies();
@@ -139,8 +166,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
             console.log("Erro ao criar uma conta", err)
         }
     }
+    const togglePlayPause = () => {
+        setIsPlaying(prev => !prev);
+    };
+
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut, signUp }}>
+        <AuthContext.Provider value={{
+            user,
+            isAuthenticated,
+            signIn,
+            signOut,
+            signUp,
+            isPlaying,
+            volume,
+            togglePlayPause,
+            setVolume,
+            currentTrack,
+            nextTrack
+        }}>
             {children}
         </AuthContext.Provider>
     )
