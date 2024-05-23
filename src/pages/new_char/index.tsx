@@ -1,4 +1,5 @@
-import { useState, ChangeEvent, FormEvent } from "react"
+import { useState, useContext, ChangeEvent, FormEvent } from "react"
+import { AuthContext } from "@/contexts/AuthContext"
 import Head from "next/head"
 import { Header } from "@/components/Header"
 import { canSSRAuth } from "@/utils/canSSRAuth"
@@ -14,14 +15,6 @@ import { setupAPIClient } from "@/services/api"
 
 import styles from './styles.module.scss'
 
-type UserProps = {
-    id: string;
-    name: string;
-    email: string;
-    avatar: string | null;
-
-}
-
 type DataProps = {
     index: string;
     name: string;
@@ -35,10 +28,10 @@ type ClassRaceProps = {
 interface CharProps {
     classes: ClassRaceProps;
     races: ClassRaceProps;
-    user: UserProps;
+
 }
 
-export default function New_Char({ classes, races, user }: CharProps) {
+export default function New_Char({ classes, races }: CharProps) {
 
     const [name, setName] = useState('')
     const [classList, setClassList] = useState(classes.results || [])
@@ -47,13 +40,15 @@ export default function New_Char({ classes, races, user }: CharProps) {
     const [classLevel, setClassLevel] = useState('1')
     const [raceSelected, setRaceSelected] = useState("Dragonborn")
 
+
     const [imageUrl, setImageUrl] = useState('');
     const [imageFile, setImageFile] = useState(null);
 
-    console.log(user)
+    //finalmente pegando os dados do user????
+    const { user } = useContext(AuthContext);
+    const [userId, setUserId] = useState(user.id)
+    console.log(userId);
 
-
-    const [userId, setUserId] = useState(user)
 
 
     function handleFile(e: ChangeEvent<HTMLInputElement>) {
@@ -88,43 +83,41 @@ export default function New_Char({ classes, races, user }: CharProps) {
         //console.log(name, classList[classSelected].index);
 
         try {
-            const data = new FormData();
-
-
-            if (name === '' || classLevel === '' || imageFile === null) {
+            if (name === '' || imageFile === null) {
                 toast.error("Preencha todos os campos!")
                 return;
             }
-
             const classLength = classList.findIndex(cls => cls.name === classSelected);
             const raceLength = racesList.findIndex(cls => cls.name === raceSelected);
 
 
-
-            const charClass = {
-                level: classLevel,
-                name: classSelected
-            }
+            const charClasses = [{ level: classLevel, name: classSelected }]
 
 
 
+            const formData = new FormData();
+            formData.append('name', name);
 
-            console.log(charClass)
+            formData.append('char_class', JSON.stringify(charClasses))
 
-            data.append('name', name);
-            data.append('char_class', JSON.stringify(charClass))
-            data.append('race', racesList[raceLength].name)
-            data.append('image', imageFile)
-            // data.append('userId', userId)
+            // charClasses.forEach(charClass => {
+            //     formData.append('char_class[][level]', charClass.level);
+            //     formData.append('char_class[][name]', charClass.name);
+            // });
+            formData.append('race', racesList[raceLength].name)
+            formData.append('image', imageFile)
+            formData.append('userId', userId)
 
+            setTimeout(() => {
+                console.log(Array.from(formData))
+            }, 1000);
 
+            // console.log(name, charClasses, racesList[raceLength].name, imageFile, userId);
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/char', data);
+            await apiClient.post('/char', formData);
 
             toast.success('cadastrado com sucesso!')
-
-
 
         } catch (err) {
             console.log(err)

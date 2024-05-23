@@ -49,6 +49,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [avatar, setAvatar] = useState(user.avatar);
+    const [userId, setUserId] = useState(user.id);
 
     const [char, setChar] = useState(charList || []);
 
@@ -76,6 +77,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
                             <div className={styles.data}>
                                 <p>Nome:</p>
                                 <p>{name}</p>
+                                <p>{userId}</p>
                             </div>
                             <div className={styles.data}>
                                 <p>Email:</p>
@@ -110,8 +112,6 @@ export default function Dashboard({ user, charList }: HomeProps) {
                                 title={item.title}
                                 char_class={item.char_class}
                                 image={item.image}
-                            //user={item.id}
-
 
                             />
                         ))}
