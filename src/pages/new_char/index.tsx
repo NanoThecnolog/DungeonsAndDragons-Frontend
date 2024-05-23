@@ -6,6 +6,7 @@ import { canSSRAuth } from "@/utils/canSSRAuth"
 import Link from "next/link"
 import { Button } from "@/components/ui/Button"
 import { FiUpload } from "react-icons/fi"
+import Router from "next/router"
 
 import { toast } from "react-toastify"
 
@@ -89,35 +90,21 @@ export default function New_Char({ classes, races }: CharProps) {
             }
             const classLength = classList.findIndex(cls => cls.name === classSelected);
             const raceLength = racesList.findIndex(cls => cls.name === raceSelected);
-
-
             const charClasses = [{ level: classLevel, name: classSelected }]
-
-
 
             const formData = new FormData();
             formData.append('name', name);
-
             formData.append('char_class', JSON.stringify(charClasses))
-
-            // charClasses.forEach(charClass => {
-            //     formData.append('char_class[][level]', charClass.level);
-            //     formData.append('char_class[][name]', charClass.name);
-            // });
             formData.append('race', racesList[raceLength].name)
             formData.append('image', imageFile)
             formData.append('userId', userId)
-
-            setTimeout(() => {
-                console.log(Array.from(formData))
-            }, 1000);
-
-            // console.log(name, charClasses, racesList[raceLength].name, imageFile, userId);
 
             const apiClient = setupAPIClient();
             await apiClient.post('/char', formData);
 
             toast.success('cadastrado com sucesso!')
+
+            Router.push('/dashboard')
 
         } catch (err) {
             console.log(err)

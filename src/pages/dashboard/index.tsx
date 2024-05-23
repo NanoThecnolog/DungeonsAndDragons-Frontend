@@ -1,5 +1,4 @@
 import { useState } from "react"
-
 import { canSSRAuth } from "@/utils/canSSRAuth"
 import Head from "next/head"
 import { Header } from "@/components/Header"
@@ -8,8 +7,8 @@ import styles from './styles.module.scss'
 import Link from "next/link"
 import { FaPlusCircle } from "react-icons/fa"
 import { IoIosSettings } from "react-icons/io"
-
 import { setupAPIClient } from "@/services/api"
+import { toast } from "react-toastify"
 
 //fazer um condicional para geração dos cards de acordo com a quantidade de personagens criados.
 
@@ -52,8 +51,28 @@ export default function Dashboard({ user, charList }: HomeProps) {
     const [userId, setUserId] = useState(user.id);
 
     const [char, setChar] = useState(charList || []);
-
     const [charLimit, setCharLimit] = useState('5');
+
+    async function handleDeleteChar(id: string) {
+
+        const apiClient = setupAPIClient();
+        console.log(id)
+        try {
+            await apiClient.delete('/char', {
+                params: {
+                    id: id
+                }
+            })
+            toast.success("Personagem Excluído!");
+            setChar((prevChar) => prevChar.filter(char => char.id !== id));
+
+
+        } catch (err) {
+            console.log("Erro ao deletar o personagem", err)
+            toast.error("Erro ao excluir o personagem!");
+
+        }
+    }
 
     return (
         <>
@@ -77,7 +96,6 @@ export default function Dashboard({ user, charList }: HomeProps) {
                             <div className={styles.data}>
                                 <p>Nome:</p>
                                 <p>{name}</p>
-                                <p>{userId}</p>
                             </div>
                             <div className={styles.data}>
                                 <p>Email:</p>
@@ -107,11 +125,13 @@ export default function Dashboard({ user, charList }: HomeProps) {
                         </div>
                         {char.map(item => (
                             <Card key={item.id}
+                                id={item.id}
                                 name={item.name}
                                 race={item.race}
                                 title={item.title}
                                 char_class={item.char_class}
                                 image={item.image}
+                                onDelete={handleDeleteChar}
 
                             />
                         ))}
