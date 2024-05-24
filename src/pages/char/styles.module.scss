@@ -1,0 +1,43 @@
+.container {
+    width: 100%;
+    height: calc(100vh - 5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+
+}
+
+.menuContainer {
+    width: 80%;
+    height: 40px;
+    margin-top: 5rem;
+
+
+
+    nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+}
+
+.dataContainer {
+    width: 80%;
+    display: flex;
+    border: 1px solid var(--color-text);
+    border-radius: 0.5rem;
+    padding: 1rem;
+
+
+    .image {
+        width: 450px;
+        height: 250px;
+        border-radius: 0.5rem;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+}

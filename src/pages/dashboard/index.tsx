@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { canSSRAuth } from "@/utils/canSSRAuth"
 import Head from "next/head"
-import { Header } from "@/components/Header"
 import Card from "@/components/Card"
 import styles from './styles.module.scss'
 import Link from "next/link"
@@ -10,10 +9,7 @@ import { IoIosSettings } from "react-icons/io"
 import { setupAPIClient } from "@/services/api"
 import { toast } from "react-toastify"
 
-//fazer um condicional para geração dos cards de acordo com a quantidade de personagens criados.
-
 //estipular limite de 5 personagens? criar uma opção de virar doador e permitir criação de mais personagens, ou retirada do limite?
-
 //criar funcionalidades para doadores? preciso ganhar dinheiro....
 
 type UserProps = {
@@ -79,7 +75,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
             <Head>
                 <title>Dashboard - D&D</title>
             </Head>
-            <Header />
+
             <main className={styles.container}>
                 <h1>Dashboard</h1>
                 <section>

@@ -1,10 +1,7 @@
 import styles from './styles.module.scss'
 import { FaTrash } from 'react-icons/fa'
-import { setupAPIClient } from '@/services/api';
-import { toast } from 'react-toastify';
-// import SweetAlert2 from 'react-sweetalert2';
+import Link from 'next/link';
 import Swal, { SweetAlertResult } from 'sweetalert2'
-import { useState } from 'react';
 
 type ClassProps = {
     level: string;
@@ -36,28 +33,33 @@ export default function Card({ id, name, title, race, char_class, image, onDelet
             if (result.isConfirmed) {
                 await onDelete(id);
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                console.log('negativa')
+                console.log('Personagem não deletado.')
             }
         });
     }
+
 
     return (
         <>
             <div className={styles.containerCard} style={{ backgroundImage: `url(http://localhost:3333/files/${image})` }}>
                 <div className={styles.blur}>
-                    <div>
-                        <h3 className={styles.textName}>{name}</h3>
-                        {title && (
-                            <p>{title}</p>
-                        )}
+                    <Link href={`/char?id=${id}`} className={styles.cardLink}>
+                        <div>
+                            <h3 className={styles.textName}>{name}</h3>
+                            {title && (
+                                <p>{title}</p>
+                            )}
 
-                    </div>
-                    {char_class.map(item => (
-                        <div key={item.id} className={styles.class}>
-                            <p>{item.name}</p>
-                            <p>{item.level}</p>
                         </div>
-                    ))}
+                        <div>
+                            {char_class.map(item => (
+                                <div key={item.id} className={styles.class}>
+                                    <p>{item.name}</p>
+                                    <p>{item.level}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </Link>
                     <button type='button' title="excluir personagem" onClick={() => handleDeleteChar(id)}>
                         <FaTrash size={20} />
                     </button>

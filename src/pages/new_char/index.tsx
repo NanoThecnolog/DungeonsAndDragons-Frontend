@@ -1,7 +1,6 @@
 import { useState, useContext, ChangeEvent, FormEvent } from "react"
 import { AuthContext } from "@/contexts/AuthContext"
 import Head from "next/head"
-import { Header } from "@/components/Header"
 import { canSSRAuth } from "@/utils/canSSRAuth"
 import Link from "next/link"
 import { Button } from "@/components/ui/Button"
@@ -120,7 +119,7 @@ export default function New_Char({ classes, races }: CharProps) {
             </Head>
 
             <div>
-                <Header />
+
                 <main className={styles.container}>
                     <h1>Novo Personagem</h1>
                     <form className={styles.form} onSubmit={handleCreateChar}>
