@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import Router from "next/router";
+import Head from "next/head";
+import { Header } from "@/components/Header";
+import Router, { useRouter } from "next/router";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { setupAPIClient } from "@/services/api";
 import { StringifyOptions } from "querystring";
@@ -57,9 +59,8 @@ interface CharProps {
 }
 export default function Char() {
     const { id } = Router.query;
+    console.log(id);
     const [charData, setCharData] = useState<{ char: CharProps, charClass: ClassProps[] } | null>(null)
-
-    const { char, charClass } = charData
 
     const [update, setUpdate] = useState(false)
 
@@ -82,9 +83,19 @@ export default function Char() {
         fecthCharData();
     }, [id, update]);
 
+    if (!charData) {
+        return <div>Carregando...</div>
+    }
+
+    const { char, charClass } = charData
+
 
     return (
         <>
+            <Head>
+                <title>Detalhes do Personagem - D&D</title>
+            </Head>
+            <Header />
             <div className={styles.container}>
                 <div className={styles.menuContainer}>
                     <nav>

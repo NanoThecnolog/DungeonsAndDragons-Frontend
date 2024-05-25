@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { canSSRAuth } from "@/utils/canSSRAuth"
 import Head from "next/head"
+import { Header } from "@/components/Header";
 import Card from "@/components/Card"
 import styles from './styles.module.scss'
 import Link from "next/link"
@@ -75,6 +76,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
             <Head>
                 <title>Dashboard - D&D</title>
             </Head>
+            <Header />
 
             <main className={styles.container}>
                 <h1>Dashboard</h1>

@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/Button"
 import { FiUpload } from "react-icons/fi"
 import Router from "next/router"
+import { Header } from "@/components/Header"
 
 import { toast } from "react-toastify"
 
@@ -117,6 +118,7 @@ export default function New_Char({ classes, races }: CharProps) {
             <Head>
                 <title>Novo Personagem - D&D</title>
             </Head>
+            <Header />
 
             <div>
 

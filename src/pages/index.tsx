@@ -1,6 +1,7 @@
 import { useContext, FormEvent, useState } from "react";
 
 import Head from "next/head"
+
 import styles from "../../styles/home.module.scss";
 
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 
 import { canSSRGuest } from "@/utils/canSSRGuest";
+
 
 
 export default function Home() {
@@ -49,6 +51,7 @@ export default function Home() {
             <Head>
                 <title>Login - D&D</title>
             </Head>
+
             <div className={styles.container}>
                 <div className={styles.containerCenter}>
                     <h1>Login</h1>
@@ -86,7 +89,6 @@ export default function Home() {
         </>
     )
 }
-
 export const getServerSideProps = canSSRGuest(async (ctx) => {
     return {
         props: {}
