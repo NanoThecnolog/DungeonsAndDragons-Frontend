@@ -204,7 +204,7 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
         props: {
             classes: responseClasses.data,
             races: responseRaces.data,
-            // user: response.data
+
         }
     }
 })

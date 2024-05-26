@@ -1,7 +1,7 @@
 import styles from './styles.module.scss'
 import { FaTrash } from 'react-icons/fa'
 import Link from 'next/link';
-import Swal, { SweetAlertResult } from 'sweetalert2'
+import Swal from 'sweetalert2'
 
 type ClassProps = {
     level: string;

@@ -4,8 +4,10 @@ import { Header } from "@/components/Header";
 import Router, { useRouter } from "next/router";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { setupAPIClient } from "@/services/api";
+import { setupAPIClientExternal } from "@/services/apiD&D/apiExternal";
 import { StringifyOptions } from "querystring";
 import { Button } from "@/components/ui/Button";
+
 
 import styles from "./styles.module.scss"
 
@@ -18,6 +20,7 @@ type ClassProps = {
 type SpellsProps = {
 
 }
+
 
 interface CharProps {
     id: string;
@@ -57,12 +60,28 @@ interface CharProps {
 
 
 }
-export default function Char() {
-    const { id } = Router.query;
-    console.log(id);
-    const [charData, setCharData] = useState<{ char: CharProps, charClass: ClassProps[] } | null>(null)
 
+type ResultsSkillsProps = {
+    index: string;
+    name: string;
+    url: string;
+}
+type SkillsProps = {
+    results: ResultsSkillsProps[];
+}
+interface DataProps {
+    skills: SkillsProps;
+}
+export default function Char({ skills }: DataProps) {
+    const { id } = Router.query;
+    const [charData, setCharData] = useState<{ char: CharProps, charClass: ClassProps[] } | null>(null)
     const [update, setUpdate] = useState(false)
+    const [skillsList, setSkillsList] = useState(skills.results || [])
+    // console.log(skillsList[4].name);
+
+
+
+
 
     useEffect(() => {
         async function fecthCharData() {
@@ -89,7 +108,6 @@ export default function Char() {
 
     const { char, charClass } = charData
 
-
     return (
         <>
             <Head>
@@ -109,39 +127,72 @@ export default function Char() {
                 <div className={styles.dataContainer}>
                     {charData ? (
                         <>
-                            <div className={styles.image} style={{ backgroundImage: `url(http://localhost:3333/files/${char.image})` }}>{!char.image && ('Sem Imagem')}</div>
-                            <div className={styles.area1}>
-                                Area 1 - info principal
-                                <h4>Detalhes do Personagem: {char.name}</h4>
-                                <p>{char.title}</p>
-                                <p>{charClass[0].name} - {charClass[0].level}</p>
-                                {charData.charClass[1] && (
-                                    <p>{charData.charClass[1].name} - {charData.charClass[1].level}</p>
-                                )}
-                                <p>{char.experience}</p>
+                            <div className={styles.row}>
+                                <div className={styles.image} style={{ backgroundImage: `url(http://localhost:3333/files/${char.image})` }}>{!char.image && ('Sem Imagem')}</div>
+                                <div className={styles.area1}>
+                                    <div className={styles.principal}>
+                                        <h4>{char.name}</h4>
+                                        <p>{char.title}</p>
+                                        {charClass.length > 1 ? (
+                                            <p>Nível {Number(charClass[0].level) + Number(charClass[1].level)}</p>
+                                        ) : (
+                                            <p>Nível {charClass[0].level}</p>
+                                        )}
+                                        <p>Exp: {char.experience}</p>
+
+
+                                    </div>
+                                    <div className={styles.class}>
+                                        <p>{charClass[0].name} - {charClass[0].level}</p>
+                                        {charData.charClass[1] && (
+                                            <p>{charClass[1].name} - {charClass[1].level}</p>
+                                        )}
+                                        <p>{char.race}</p>
+                                    </div>
+                                    <div className={styles.antecedentes}>
+                                        <p>Antecedêntes{char.background}</p>
+                                    </div>
+                                    <div className={styles.ca}>CA {char.armor_class}</div>
+
+                                </div>
                             </div>
-                            <div className={styles.area2}>
-                                Area 2 - status
-                                <p>{char.str}</p>
-                                <p>{char.dex}</p>
-                                <p>{char.con}</p>
-                                <p>{char.int}</p>
-                                <p>{char.wis}</p>
-                                <p>{char.cha}</p>
-                            </div>
-                            <div className={styles.area3}>
-                                Area 3 - Pericias
-                                <p>fazer prisma migrate depois</p>
-                            </div>
-                            <div className={styles.area4}>
-                                Area 4 - Pontos de vida
-                                {char.current_hp} / {char.max_hp}
-                                <p>Vida temporária</p>
-                                {char.temporary_hp}
-                            </div>
-                            <div className={styles.area5}>
-                                Area 5 - Resistencia a morte
-                                {char.death_saving_throws}
+                            <div className={styles.row}>
+                                <div className={styles.area2}>
+
+                                    <p>Força {char.str}</p>
+                                    <p>Dextreza {char.dex}</p>
+                                    <p>Constituição {char.con}</p>
+                                    <p>Inteligência {char.int}</p>
+                                    <p>Sabedoria {char.wis}</p>
+                                    <p>Carisma {char.cha}</p>
+                                </div>
+
+                                {/*pensar em registrar as perícias do personagem junto com seus valores e mostrá-las aqui. Essa lista sendo renderizada agora pode passar para a edição de personagem.*/}
+                                {/*Relizar o Prisma migrate para atualizar o banco de dados adicionando o campo skills para armazenar os dados das perícias do personagem*/}
+                                <div className={styles.area3}>
+                                    Area 3 - Pericias
+                                    {skillsList.map((item, index) => {
+                                        return (
+                                            <p key={index}>{item.name}</p>
+                                        )
+                                    })}
+
+
+                                </div>
+                                <div className={styles.area4}>
+                                    Area 4 - Pontos de vida
+                                    {char.current_hp} / {char.max_hp}
+                                    <p>Vida temporária</p>
+                                    {char.temporary_hp}
+                                </div>
+
+                                {/**Na área de resistencia a morte, a ideia é utilizar checkboxes para guardar o uso dos testes de resistencia a morte.
+                                 * Posso utilizar o banco de dados pra isso ou o localstorage do navegador do usuário... ainda não decidi.
+                                 */}
+                                <div className={styles.area5}>
+                                    Area 5 - Resistencia a morte
+                                    {char.death_saving_throws}
+                                </div>
                             </div>
 
 
@@ -149,7 +200,11 @@ export default function Char() {
 
 
                         </>
-                    ) : "Carregando..."}
+                    ) : (
+                        <div className={styles.loading}>
+                            <h2>Carregando...</h2>
+                        </div>
+                    )}
                 </div>
             </div>
         </>
@@ -157,8 +212,13 @@ export default function Char() {
 }
 export const getServerSideProps = canSSRAuth(async (ctx) => {
 
+    const apiClientExternal = setupAPIClientExternal();
+    const responseSkills = await apiClientExternal.get("/api/skills")
+
     return {
-        props: {}
+        props: {
+            skills: responseSkills.data
+        }
     }
 
 })
