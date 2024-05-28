@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 
 //estipular limite de 5 personagens? criar uma opção de virar doador e permitir criação de mais personagens, ou retirada do limite?
 //criar funcionalidades para doadores? preciso ganhar dinheiro....
+//funcionalidade de selecionar trilha sonora?
 
 type UserProps = {
     id: string;
@@ -114,11 +115,14 @@ export default function Dashboard({ user, charList }: HomeProps) {
                     <div className={styles.containerCard}>
                         <div className={styles.charList}>
                             <h2>Personagens</h2>
-                            <Link href="/new_char">
-                                <button type="button" title="Criar Personagem!">
-                                    <FaPlusCircle size={20} />
-                                </button>
-                            </Link>
+                            {char.length >= Number(charLimit) ? '' : (
+                                <Link href="/new_char">
+                                    <button type="button" title="Criar Personagem!">
+                                        <FaPlusCircle size={20} />
+                                    </button>
+                                </Link>
+                            )}
+
 
                         </div>
                         {char.map(item => (

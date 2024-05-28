@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import { Header } from "@/components/Header";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { setupAPIClient } from "@/services/api";
 import { setupAPIClientExternal } from "@/services/apiD&D/apiExternal";
-import { StringifyOptions } from "querystring";
 import { Button } from "@/components/ui/Button";
+import CheckBox from "@/components/ui/CheckBox";
 
 
 import styles from "./styles.module.scss"
@@ -57,8 +57,6 @@ interface CharProps {
     Initiative: string;
     cantrips: string[];
     char_class: ClassProps[];
-
-
 }
 
 type ResultsSkillsProps = {
@@ -73,15 +71,26 @@ interface DataProps {
     skills: SkillsProps;
 }
 export default function Char({ skills }: DataProps) {
-    const { id } = Router.query;
+    const router = useRouter();
+    const [id, setId] = useState(null);
     const [charData, setCharData] = useState<{ char: CharProps, charClass: ClassProps[] } | null>(null)
     const [update, setUpdate] = useState(false)
     const [skillsList, setSkillsList] = useState(skills.results || [])
-    // console.log(skillsList[4].name);
+    const [modifyStr, setModifyStr] = useState("");
+    const [modifyDex, setModifyDex] = useState("");
+    const [modifyCon, setModifyCon] = useState("");
+    const [modifyInt, setModifyInt] = useState("");
+    const [modifyWis, setModifyWis] = useState("");
+    const [modifyCha, setModifyCha] = useState("");
 
-
-
-
+    useEffect(() => {
+        if (router.isReady) {
+            const { id } = router.query;
+            if (id) {
+                setId(id);
+            }
+        }
+    }, [router.isReady, router.query]);
 
     useEffect(() => {
         async function fecthCharData() {
@@ -102,11 +111,58 @@ export default function Char({ skills }: DataProps) {
         fecthCharData();
     }, [id, update]);
 
+    useEffect(() => {
+
+        function modificadores() {
+            if (!charData) {
+                return;
+            }
+            const { char } = charData;
+
+            const str = Number(char.str);
+            const baseStr = Math.floor(str / 2) - 5;
+            const modifyStr = baseStr >= 0 ? `+${baseStr}` : `${baseStr}`
+            setModifyStr(modifyStr);
+
+            const dex = Number(char.dex);
+            const baseDex = Math.floor(dex / 2) - 5;
+            const modifyDex = baseDex >= 0 ? `+${baseDex}` : `${baseDex}`
+            setModifyDex(modifyDex);
+
+            const con = Number(char.con);
+            const baseCon = Math.floor(con / 2) - 5;
+            const modifyCon = baseCon >= 0 ? `+${baseCon}` : `${baseCon}`
+            setModifyCon(modifyCon);
+
+            const int = Number(char.int);
+            const baseInt = Math.floor(int / 2) - 5;
+            const modifyInt = baseInt >= 0 ? `+${baseInt}` : `${baseInt}`
+            setModifyInt(modifyInt);
+
+            const wis = Number(char.wis);
+            const baseWis = Math.floor(wis / 2) - 5;
+            const modifyWis = baseWis >= 0 ? `+${baseWis}` : `${baseWis}`
+            setModifyWis(modifyWis);
+
+            const cha = Number(char.cha);
+            const baseCha = Math.floor(cha / 2) - 5;
+            const modifyCha = baseCha >= 0 ? `+${baseCha}` : `${baseCha}`
+            setModifyCha(modifyCha);
+
+
+        }
+        modificadores();
+
+    }, [charData, update])
+
     if (!charData) {
         return <div>Carregando...</div>
     }
 
     const { char, charClass } = charData
+
+
+
 
     return (
         <>
@@ -130,79 +186,120 @@ export default function Char({ skills }: DataProps) {
                             <div className={styles.row}>
                                 <div className={styles.image} style={{ backgroundImage: `url(http://localhost:3333/files/${char.image})` }}>{!char.image && ('Sem Imagem')}</div>
                                 <div className={styles.area1}>
-                                    <div className={styles.principal}>
-                                        <h4>{char.name}</h4>
-                                        <p>{char.title}</p>
-                                        {charClass.length > 1 ? (
-                                            <p>Nível {Number(charClass[0].level) + Number(charClass[1].level)}</p>
-                                        ) : (
-                                            <p>Nível {charClass[0].level}</p>
-                                        )}
-                                        <p>Exp: {char.experience}</p>
+                                    <div className={styles.row}>
+                                        <div className={styles.principal}>
+                                            <h4>{char.name}</h4>
+                                            <p>{char.title ? char.title : (<>Título não definido</>)}</p>
+                                            {charClass.length > 1 ? (
+                                                <p>Nível {Number(charClass[0].level) + Number(charClass[1].level)}</p>
+                                            ) : (
+                                                <p>Nível {charClass[0].level}</p>
+                                            )}
+                                            <p>Exp: {char.experience}</p>
 
 
+                                        </div>
+                                        <div className={styles.class}>
+                                            <p>{charClass[0].name} - {charClass[0].level}</p>
+                                            {charData.charClass[1] && (
+                                                <p>{charClass[1].name} - {charClass[1].level}</p>
+                                            )}
+                                            <p>{char.race}</p>
+
+                                        </div>
+                                        <div className={styles.antecedentes}>
+                                            <p>Antecedêntes{char.background}</p>
+                                        </div>
+                                        <div className={styles.ca}>
+                                            <p>CA</p>
+                                            <p>{char.armor_class}</p>
+                                        </div>
                                     </div>
-                                    <div className={styles.class}>
-                                        <p>{charClass[0].name} - {charClass[0].level}</p>
-                                        {charData.charClass[1] && (
-                                            <p>{charClass[1].name} - {charClass[1].level}</p>
-                                        )}
-                                        <p>{char.race}</p>
+                                    <div className={styles.row}>
+                                        <div className={styles.area4}>
+                                            <h3>Pontos de vida</h3>
+                                            <p>{char.current_hp} / {char.max_hp}</p>
+                                            <h4>Vida temporária</h4>
+                                            <p>{char.temporary_hp}</p>
+                                        </div>
+                                        {/**Na área de resistencia a morte, a ideia é utilizar checkboxes para guardar o uso dos testes de resistencia a morte.
+                                         * Posso utilizar o banco de dados pra isso ou o localstorage do navegador do usuário... ainda não decidi.
+                                         */}
+                                        <div className={styles.area5}>
+                                            <h3>Resistencia a morte</h3>
+                                            {char.death_saving_throws}
+                                            <div>
+                                                <CheckBox>
+                                                    Primeira morte
+                                                </CheckBox>
+                                                <CheckBox>
+                                                    Segunda morte
+                                                </CheckBox>
+                                                <CheckBox>
+                                                    Terceira morte
+                                                </CheckBox>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className={styles.antecedentes}>
-                                        <p>Antecedêntes{char.background}</p>
-                                    </div>
-                                    <div className={styles.ca}>CA {char.armor_class}</div>
 
                                 </div>
+
                             </div>
+
                             <div className={styles.row}>
-                                <div className={styles.area2}>
+                                <div className={styles.linhadebaixo}>
+                                    <div className={styles.statusContainer}>
+                                        <div className={styles.status}>
+                                            <p className={styles.statusText}>Força</p>
+                                            <p className={styles.statusValue}>{char.str}</p>
+                                            <p className={styles.statusModify}>({modifyStr})</p>
+                                        </div>
+                                        <div className={styles.status}>
+                                            <p className={styles.statusText}>Dextreza</p>
+                                            <p className={styles.statusValue}>{char.dex}</p>
+                                            <p className={styles.statusModify}>({modifyDex})</p>
+                                        </div>
+                                        <div className={styles.status}>
+                                            <p className={styles.statusText}>Constituição</p>
+                                            <p className={styles.statusValue}>{char.con}</p>
+                                            <p className={styles.statusModify}>({modifyCon})</p>
+                                        </div>
+                                        <div className={styles.status}>
+                                            <p className={styles.statusText}>Inteligência</p>
+                                            <p className={styles.statusValue}>{char.int}</p>
+                                            <p className={styles.statusModify}>({modifyInt})</p>
+                                        </div>
+                                        <div className={styles.status}>
+                                            <p className={styles.statusText}>Sabedoria</p>
+                                            <p className={styles.statusValue}>{char.wis}</p>
+                                            <p className={styles.statusModify}>({modifyWis})</p>
+                                        </div>
+                                        <div className={styles.status}>
+                                            <p className={styles.statusText}>Carisma</p>
+                                            <p className={styles.statusValue}>{char.cha}</p>
+                                            <p className={styles.statusModify}>({modifyCha})</p>
+                                        </div>
+                                        <div>Editar</div>
+                                    </div>
 
-                                    <p>Força {char.str}</p>
-                                    <p>Dextreza {char.dex}</p>
-                                    <p>Constituição {char.con}</p>
-                                    <p>Inteligência {char.int}</p>
-                                    <p>Sabedoria {char.wis}</p>
-                                    <p>Carisma {char.cha}</p>
-                                </div>
-
-                                {/*pensar em registrar as perícias do personagem junto com seus valores e mostrá-las aqui. Essa lista sendo renderizada agora pode passar para a edição de personagem.*/}
-                                {/*Relizar o Prisma migrate para atualizar o banco de dados adicionando o campo skills para armazenar os dados das perícias do personagem*/}
-                                <div className={styles.area3}>
-                                    Area 3 - Pericias
-                                    {skillsList.map((item, index) => {
-                                        return (
-                                            <p key={index}>{item.name}</p>
-                                        )
-                                    })}
+                                    {/*pensar em registrar as perícias do personagem junto com seus valores e mostrá-las aqui. Essa lista sendo renderizada agora pode passar para a edição de personagem.*/}
+                                    {/*Relizar o Prisma migrate para atualizar o banco de dados adicionando o campo skills para armazenar os dados das perícias do personagem*/}
+                                    <div className={styles.area3}>
+                                        Area 3 - Pericias
+                                        {skillsList.map((item, index) => {
+                                            return (
+                                                <p key={index}>{item.name}</p>
+                                            )
+                                        })}
 
 
-                                </div>
-                                <div className={styles.area4}>
-                                    Area 4 - Pontos de vida
-                                    {char.current_hp} / {char.max_hp}
-                                    <p>Vida temporária</p>
-                                    {char.temporary_hp}
-                                </div>
-
-                                {/**Na área de resistencia a morte, a ideia é utilizar checkboxes para guardar o uso dos testes de resistencia a morte.
-                                 * Posso utilizar o banco de dados pra isso ou o localstorage do navegador do usuário... ainda não decidi.
-                                 */}
-                                <div className={styles.area5}>
-                                    Area 5 - Resistencia a morte
-                                    {char.death_saving_throws}
+                                    </div>
                                 </div>
                             </div>
-
-
-
-
-
                         </>
                     ) : (
                         <div className={styles.loading}>
-                            <h2>Carregando...</h2>
+                            <h2>Carregando....</h2>
                         </div>
                     )}
                 </div>

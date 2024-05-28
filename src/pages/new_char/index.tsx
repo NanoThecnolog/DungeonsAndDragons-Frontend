@@ -102,7 +102,7 @@ export default function New_Char({ classes, races }: CharProps) {
             const apiClient = setupAPIClient();
             await apiClient.post('/char', formData);
 
-            toast.success('cadastrado com sucesso!')
+            toast.success('Personagem criado!')
 
             Router.push('/dashboard')
 

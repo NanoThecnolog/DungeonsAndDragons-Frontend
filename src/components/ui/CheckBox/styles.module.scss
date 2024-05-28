@@ -1,0 +1,59 @@
+.customCheckbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px;
+    margin: 10px 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    user-select: none;
+    -webkit-user-select: none;
+    display: flex;
+}
+
+/* Sumindo com o padrão */
+.customCheckbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Estilo da Checkbox */
+.customCheckbox .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: var(--color-text);
+    border-radius: 4px;
+}
+
+/* Checkbox marcado*/
+.customCheckbox input:checked~.checkmark {
+    background-color: var(--indigo-900);
+}
+
+/*Checkmark*/
+.customCheckbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/*Checkmark visível*/
+.customCheckbox input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Estilo do Checkmark */
+.customCheckbox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--vermelhoLaranja);
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
