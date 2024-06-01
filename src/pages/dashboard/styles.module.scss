@@ -5,6 +5,7 @@
     justify-content: center;
     height: calc(100vh - 5rem);
     color: var(--color-text);
+    border: 1px solid red;
 
     h2 {
         color: var(--color-text);
@@ -29,149 +30,89 @@
             color: var(--vermelhoLaranja);
         }
     }
-}
 
-.containerPerfil {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    width: 40%;
-    max-width: 800px;
-    border: 3px solid var(--color-text);
-    border-radius: 1rem;
-    padding-top: 4rem;
-
-
-}
-
-.userSettings {
-    display: flex;
-    justify-content: space-around;
-    width: 30%;
-}
-
-.userData {
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-
-}
-
-.data {
-    display: flex;
-    justify-content: space-between;
-    margin: 0.4rem 0;
-}
-
-.avatar {
-    width: 100px;
-    height: 100px;
-    margin-top: 40px;
-    border-radius: 4rem;
-    border: 3px solid var(--color-text);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.5s;
-
-    &:hover {
-        transform: scale(1.2);
-    }
-
-    section {
+    .containerPerfil {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        width: 100%;
-        height: 100%;
-        margin-top: 20px;
-    }
+        flex-direction: column;
+        width: 40%;
+        max-width: 800px;
+        border: 1px solid var(--color-text);
+        border-radius: 1rem;
+        padding-top: 4rem;
 
-    button {
-        border: none;
-        background-color: transparent;
-        transition: all 0.5s;
-
-        &:hover {
-            transform: scale(1.3);
-            color: var(--vermelhoLaranja);
+        .userSettings {
+            display: flex;
+            justify-content: space-around;
+            width: 30%;
         }
 
+        .userData {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .data {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.4rem 0;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            margin-top: 40px;
+            border-radius: 4rem;
+            border: 2px solid var(--color-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.5s;
+
+            &:hover {
+                transform: scale(1.2);
+            }
+
+
+        }
+
+
+
+
     }
 
+    .containerCard {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+        width: 40%;
+        max-width: 800px;
+        padding-top: 4rem;
 
+    }
 
-}
+    .userSettings {
+        display: flex;
+        justify-content: space-around;
+        width: 30%;
+    }
 
-.containerPerfil {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    width: 30%;
-    max-width: 800px;
-    height: 100%;
+    .charList {
+        display: flex;
+        justify-content: center;
 
+        width: 30%;
+        margin-bottom: 20px;
 
-}
+        button {
+            margin: 4px 0 0 10px;
 
-.userData {
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-
-}
-
-.data {
-    display: flex;
-    justify-content: space-between;
-    margin: 0.4rem 0;
-}
-
-.avatar {
-    width: 100px;
-    height: 100px;
-    margin-top: 40px;
-    border-radius: 4rem;
-    border: 2px solid var(--color-text);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-
-
-.containerCard {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    width: 40%;
-    max-width: 800px;
-    padding-top: 4rem;
-
-}
-
-.userSettings {
-    display: flex;
-    justify-content: space-around;
-    width: 30%;
-}
-
-
-.charList {
-    display: flex;
-    justify-content: center;
-
-    width: 30%;
-    margin-bottom: 20px;
-
-
-    button {
-        margin: 4px 0 0 10px;
+        }
     }
 }
 
@@ -179,7 +120,4 @@
     .containerCard {
         flex-direction: column;
     }
-
-
-
 }

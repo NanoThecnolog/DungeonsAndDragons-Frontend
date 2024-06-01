@@ -47,14 +47,12 @@ export default function Dashboard({ user, charList }: HomeProps) {
     const [email, setEmail] = useState(user.email);
     const [avatar, setAvatar] = useState(user.avatar);
     const [userId, setUserId] = useState(user.id);
-
     const [char, setChar] = useState(charList || []);
     const [charLimit, setCharLimit] = useState('5');
+    const apiClient = setupAPIClient();
 
     async function handleDeleteChar(id: string) {
-
-        const apiClient = setupAPIClient();
-        console.log(id)
+        // console.log(id)
         try {
             await apiClient.delete('/char', {
                 params: {
@@ -63,7 +61,6 @@ export default function Dashboard({ user, charList }: HomeProps) {
             })
             toast.success("Personagem Excluído!");
             setChar((prevChar) => prevChar.filter(char => char.id !== id));
-
 
         } catch (err) {
             console.log("Erro ao deletar o personagem", err)
@@ -78,7 +75,6 @@ export default function Dashboard({ user, charList }: HomeProps) {
                 <title>Dashboard - D&D</title>
             </Head>
             <Header />
-
             <main className={styles.container}>
                 <h1>Dashboard</h1>
                 <section>
@@ -87,7 +83,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
                             <h2>Perfil</h2>
                             <Link href="/me">
                                 <button title="Editar informações da conta">
-                                    <IoIosSettings color="var(--color-text)" size={25} />
+                                    <IoIosSettings size={25} />
                                 </button>
                             </Link>
                         </div>
@@ -106,9 +102,6 @@ export default function Dashboard({ user, charList }: HomeProps) {
                             </div>
                             <div className={styles.avatar}>
                                 {avatar ? avatar : "sem avatar"}
-                            </div>
-                            <div>
-
                             </div>
                         </div>
                     </div>
