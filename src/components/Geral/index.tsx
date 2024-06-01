@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import CheckBox from "@/components/ui/CheckBox";
 import { TbSettings } from "react-icons/tb";
+import DiceRoller from "../Dados/Rolagem";
 
 import styles from "./styles.module.scss"
+import { Button } from "../ui/Button";
+import { toast } from "react-toastify";
+
+import { setupAPIClient } from "@/services/api";
 
 
 
@@ -86,6 +91,8 @@ export default function Geral({ charData, skills }: CharDataProps) {
     const [modifyWis, setModifyWis] = useState("");
     const [modifyCha, setModifyCha] = useState("");
     const [isExperienceExceeded, setIsExperienceExceeded] = useState(false);
+
+    const [notes, setNotes] = useState("");
 
     const experienceTable: { [level: number]: number } = {
         1: 0,
@@ -193,6 +200,29 @@ export default function Geral({ charData, skills }: CharDataProps) {
         };
     }
     // console.log(proficiencyBonus)
+    async function handleNotes() {
+        console.log("notes")
+
+        try {
+            if (!notes) {
+                toast.warning("Nada foi escrito.")
+                return;
+            }
+            const noteData = {
+                id: char.id,
+                notes: [{ text: notes, date: new Date() }]
+            };
+
+            const apiClient = setupAPIClient();
+
+            await apiClient.put('/char', noteData)
+            toast.success("Anotações salvas!")
+            setNotes("")
+        } catch (err) {
+            console.log("Erro ao salvar notas", err)
+            toast.error("Erro ao salvar anotações...")
+        }
+    }
 
     if (!charData) {
         return <div>Carregando...</div>
@@ -334,8 +364,23 @@ export default function Geral({ charData, skills }: CharDataProps) {
                                             )
                                         })}
                                     </div>
-                                    <div>
-                                        <div>
+                                    <div className={styles.outros}>
+                                        <div className={styles.row}>
+                                            <div className={styles.dados}>
+                                                <DiceRoller />
+                                            </div>
+                                        </div>
+                                        <div className={styles.row}>
+                                            <div className={styles.anotacoes}>
+                                                <textarea
+                                                    title="anotações"
+                                                    placeholder="Anotações da sessão"
+                                                    className={styles.textAnotacoes}
+                                                    value={notes}
+                                                    onChange={(e) => setNotes(e.target.value)}
+                                                />
+                                                <Button onClick={handleNotes}>Salvar</Button>
+                                            </div>
 
                                         </div>
                                     </div>

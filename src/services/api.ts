@@ -1,11 +1,11 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, AxiosInstance } from 'axios'
 import { parseCookies } from 'nookies'
 import { AuthTokenError } from './errors/AuthTokenError'
 
 import { signOut } from '@/contexts/AuthContext'
 import { GetServerSidePropsContext } from 'next'
 
-export function setupAPIClient(ctx?: GetServerSidePropsContext) {
+export function setupAPIClient(ctx?: GetServerSidePropsContext): AxiosInstance {
 
     let cookies = parseCookies(ctx)
 
@@ -21,7 +21,7 @@ export function setupAPIClient(ctx?: GetServerSidePropsContext) {
     }, (error: AxiosError) => {
         if (error.response?.status === 401) {
             if (typeof window !== undefined) {
-                //chamar função de deslogar
+
                 signOut();
             } else {
                 return Promise.reject(new AuthTokenError())

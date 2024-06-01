@@ -1,0 +1,66 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.rolls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    color: var(--color-text)
+}
+
+.die {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.results {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.sum,
+.withModifier {
+    margin-bottom: 0.5rem;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+
+
+    button {
+        border: 0;
+        border-radius: 0.5rem;
+        background-color: var(--verde-900);
+        color: var(--color-text);
+        padding: 0.3rem;
+        margin: 0.3rem;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.5s;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
+}
+
+.tipoDado {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modificadores {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+}
