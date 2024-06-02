@@ -268,7 +268,7 @@ export default function Geral({ charData, skills }: CharDataProps) {
                                         <div className={styles.antecedentes}>
                                             <div className={styles.editar}><TbSettings size={25} /></div>
                                             <p>Antecedêntes</p>
-                                            <p>{char.background}</p>
+                                            <p><strong>{char.background}</strong></p>
                                         </div>
                                         <div className={styles.ca}>
                                             <div className={styles.editar}><TbSettings size={25} /></div>
@@ -379,7 +379,13 @@ export default function Geral({ charData, skills }: CharDataProps) {
                                                     value={notes}
                                                     onChange={(e) => setNotes(e.target.value)}
                                                 />
-                                                <Button onClick={handleNotes}>Salvar</Button>
+                                                <div>
+                                                    <Button>Ver notas</Button>
+                                                    <Button onClick={handleNotes}>Salvar</Button>
+                                                </div>
+                                                {//adicionar um botão para abrir um modal apresentando uma tabela com todas as notas salvas do personagem.
+                                                    //Na tabela devo apresentar o texto salvo, data de criação, opção para editar ou excluir.
+                                                }
                                             </div>
 
                                         </div>

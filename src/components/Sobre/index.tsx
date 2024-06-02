@@ -96,6 +96,12 @@ export default function Sobre({ charData }) {
                             </div>
                         </div>
                         <div className={styles.aliados}>
+                            {/*Após adaptar o schema Prisma para criar uma nova tabela para organizações.
+                            Criar um modal que apresente todas as organizações já cadastradas, seus brasões, quantidade de membros associados a ela e opção do personagem se associar.
+                            A associação será através da seleção de uma organização na lista para evitar erros de digitação, etc.
+                            Haverá a possibilidade de criar uma organização para o jogador. A criação exigirá nome e brasão da organização
+                            Pensar em uma página da organização, com ideais, missão visão valores? acho interessante.
+                            */}
                             <div className={styles.editar}><TbSettings size={25} /></div>
                             <div className={styles.brasao}>Brasão</div>
                             <h4>aliados e organizações</h4>

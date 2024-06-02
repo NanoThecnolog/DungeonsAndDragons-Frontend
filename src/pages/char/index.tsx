@@ -114,7 +114,7 @@ export default function Char({ skills }: SkillComponentProps) {
 
 
     if (!charData || !skills) {
-        return <div>Carregando...</div>
+        return <div className={styles.loading}>Carregando...</div>
     }
 
     function renderComponent() {
@@ -145,10 +145,10 @@ export default function Char({ skills }: SkillComponentProps) {
             <div className={styles.container}>
                 <div className={styles.menuContainer}>
                     <nav>
-                        <Button style={{ width: '18rem' }} onClick={() => setCurrentComponent('A')}>Geral</Button>
-                        <Button style={{ width: '18rem' }} onClick={() => setCurrentComponent('C')}>Inventario</Button>
-                        <Button style={{ width: '18rem' }} onClick={() => setCurrentComponent('D')}>Magias</Button>
-                        <Button style={{ width: '18rem' }} onClick={() => setCurrentComponent('B')}>Sobre</Button>
+                        <Button onClick={() => setCurrentComponent('A')}>Geral</Button>
+                        <Button onClick={() => setCurrentComponent('C')}>Inventario</Button>
+                        <Button onClick={() => setCurrentComponent('D')}>Magias</Button>
+                        <Button onClick={() => setCurrentComponent('B')}>Sobre</Button>
 
                     </nav>
                 </div>

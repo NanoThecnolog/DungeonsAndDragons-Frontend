@@ -118,18 +118,23 @@ export default function Dashboard({ user, charList }: HomeProps) {
 
 
                         </div>
-                        {char.map(item => (
-                            <Card key={item.id}
-                                id={item.id}
-                                name={item.name}
-                                race={item.race}
-                                title={item.title}
-                                char_class={item.char_class}
-                                image={item.image}
-                                onDelete={handleDeleteChar}
 
-                            />
-                        ))}
+                        {char.length >= 1 ? (
+                            char.map(item => (
+                                <Card
+                                    key={item.id}
+                                    id={item.id}
+                                    name={item.name}
+                                    race={item.race}
+                                    title={item.title}
+                                    char_class={item.char_class}
+                                    image={item.image}
+                                    onDelete={handleDeleteChar}
+                                />
+                            ))
+                        ) : (
+                            <div>Nenhum personagem foi criado</div>
+                        )}
 
 
                     </div>
