@@ -6,7 +6,7 @@ This is a project for D&D brazilians players.
 
 Esse projeto tem como objetivo auxiliar na criação e manutenção das fichas de personagens dos jogadores.
 
-É especialmente focado para jogadores que utilização computadores, tablets ou celulares durante suas sessões de D&D.
+É especialmente focado para jogadores que utilizarão computadores, tablets ou celulares durante suas sessões de D&D.
 
 ## Funções
 

@@ -13,6 +13,10 @@ import { toast } from "react-toastify"
 //estipular limite de 5 personagens? criar uma opção de virar doador e permitir criação de mais personagens, ou retirada do limite?
 //criar funcionalidades para doadores? preciso ganhar dinheiro....
 //funcionalidade de selecionar trilha sonora?
+//criar um sistema de moedas para realizar certas ações no aplicativo, como criar um item, criar uma organização, etc...
+//a ideia é que a conta receba uma fração de moedas de acordo com o tempo que o jogador permanece ativo no jogo.
+//posso criar uma lógica que adiciar 0.1 moedas a cada 1hora de conta logada e a partir de determinado valor em moedas ou em tempo logado
+//a quantidade de moedas recebidas diminui pra 0.05, para desencorajar o jogador ficar muito tempo no computador....
 
 type UserProps = {
     id: string;
