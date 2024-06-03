@@ -92,6 +92,7 @@ export default function Geral({ charData, skills }: CharDataProps) {
     const [modifyCha, setModifyCha] = useState("");
     const [isExperienceExceeded, setIsExperienceExceeded] = useState(false);
 
+
     const [notes, setNotes] = useState("");
 
     const experienceTable: { [level: number]: number } = {
@@ -116,6 +117,7 @@ export default function Geral({ charData, skills }: CharDataProps) {
         19: 305000,
         20: 355000,
     };
+    const experienceLimit = experienceTable[level];
 
 
     useEffect(() => {
@@ -163,6 +165,13 @@ export default function Geral({ charData, skills }: CharDataProps) {
         calculateProficiency(level)
 
     }, [char, update])
+    useEffect(() => {
+        if (Number(char.experience) >= experienceLimit) {
+            setIsExperienceExceeded(true);
+        } else {
+            setIsExperienceExceeded(false);
+        }
+    }, [char.experience, experienceLimit]);
     function calculateLevel() {
         if (charClass.length > 1) {
 
@@ -224,10 +233,11 @@ export default function Geral({ charData, skills }: CharDataProps) {
         }
     }
 
+
     if (!charData) {
         return <div>Carregando...</div>
     }
-    const experienceLimit = experienceTable[level];
+
     // console.log("level", level)
 
     return (
@@ -249,6 +259,7 @@ export default function Geral({ charData, skills }: CharDataProps) {
                                             <p>{char.title ? char.title : (<>Título não definido</>)}</p>
                                             <div className={styles.nivel}>
                                                 <p> Nível {level}</p>
+
                                                 {isExperienceExceeded && (<div className={styles.subirNivel}>+ subir nivel</div>)}
                                             </div>
 

@@ -17,6 +17,7 @@ import { toast } from "react-toastify"
 //a ideia é que a conta receba uma fração de moedas de acordo com o tempo que o jogador permanece ativo no jogo.
 //posso criar uma lógica que adiciar 0.1 moedas a cada 1hora de conta logada e a partir de determinado valor em moedas ou em tempo logado
 //a quantidade de moedas recebidas diminui pra 0.05, para desencorajar o jogador ficar muito tempo no computador....
+//cobrar por buff para organizações? vantagens da organização, contratos?
 
 type UserProps = {
     id: string;
