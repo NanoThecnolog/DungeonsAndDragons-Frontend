@@ -14,6 +14,7 @@ import Spells from "@/components/Magias";
 
 import styles from "./styles.module.scss"
 
+
 type ClassProps = {
     id: string;
     name: string;
@@ -60,14 +61,21 @@ type ResultsSkillsProps = {
     name: string;
     url: string;
 }
+
 interface SkillProps {
     count: number
     results: ResultsSkillsProps[];
 }
+type UserProps = {
+    id: string;
+    name: string;
+    email: string;
+}
 interface SkillComponentProps {
     skills: SkillProps | null
+    usuario: UserProps
 }
-export default function Char({ skills }: SkillComponentProps) {
+export default function Char({ skills, usuario }: SkillComponentProps) {
     const [currentComponent, setCurrentComponent] = useState('A');
     const [title, setTitle] = useState('');
 
@@ -75,6 +83,10 @@ export default function Char({ skills }: SkillComponentProps) {
     const [id, setId] = useState(null);
     const [charData, setCharData] = useState<{ char: CharProps, charClass: ClassProps[] } | null>(null)
     const [update, setUpdate] = useState(false)
+
+    // const [usuarioReq, setUsuarioReq] = useState(usuario);
+    // console.log(usuarioReq)
+
 
     // const [skillsList, setSkillsList] = useState<SkillProps>(null)
 
@@ -179,20 +191,29 @@ export default function Char({ skills }: SkillComponentProps) {
     )
 }
 export const getServerSideProps = canSSRAuth(async (ctx) => {
+    const apiClient = setupAPIClient(ctx);
+    const apiClientExternal = setupAPIClientExternal();
     try {
-        const apiClientExternal = setupAPIClientExternal();
+
         const responseSkills = await apiClientExternal.get("/api/skills")
         const skills = responseSkills.data
+
+        const response = await apiClient.get('./me')
+        const usuario = response.data
+        console.log("dados do usuario na pagina char: ", usuario)
+
         return {
             props: {
                 skills,
+                usuario
             }
         }
     } catch (err) {
         console.log("Erro ao buscar pericias no servidor externo", err)
         return {
             props: {
-                skills: null
+                skills: null,
+                usuario: null
 
             }
         }

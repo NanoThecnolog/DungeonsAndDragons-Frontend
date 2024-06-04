@@ -167,11 +167,11 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
     } catch (err) {
         console.log("Erro ao buscar dados com a API", err)
 
-        // return {
-        //     redirect: {
-        //         destination: '/',
-        //         permanent: false,
-        //     }
-        // };
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        };
     }
 })
