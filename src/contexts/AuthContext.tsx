@@ -111,7 +111,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 password
             })
 
-            //console.log(response.data)
+            console.log("Resposta do login: ", response.data)
             const { id, name, token } = response.data
 
             setCookie(undefined, '@d&d.token', token, {
@@ -124,16 +124,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 name,
                 email,
                 avatar: null,
-            })
+            });
 
             //passando o token para outras requisições
 
-            api.defaults.headers['Authorization'] = `Bearer ${token}`
+            api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
             //mandar para o dashboard, inicio do sistema, qualquer coisa do tipo
-            toast.success("Bem vindo, jogador!")
-
-            Router.push('/dashboard')
+            toast.success("Bem vindo, jogador!");
+            Router.push('/dashboard');
 
         } catch (err: any) {
 
@@ -143,6 +142,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 
             }
+            console.log('Erro no signIn: ', err);
 
 
         }

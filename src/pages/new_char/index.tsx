@@ -48,7 +48,7 @@ export default function New_Char({ classes, races }: CharProps) {
     //finalmente pegando os dados do user????
     const { user } = useContext(AuthContext);
     const [userId, setUserId] = useState(user.id)
-    console.log(userId);
+    // console.log(userId);
 
 
 

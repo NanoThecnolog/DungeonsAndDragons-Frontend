@@ -16,8 +16,6 @@ export function canSSRGuest<P extends { [key: string]: any }>(fn: GetServerSideP
                 }
             }
         }
-
-
         return await fn(ctx);
 
     }

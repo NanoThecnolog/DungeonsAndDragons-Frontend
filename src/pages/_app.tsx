@@ -14,20 +14,21 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
         <AuthProvider>
             <AuthContext.Consumer>
-                {({ isPlaying, volume, currentTrack, nextTrack }) => (
-                    <ReactHowler
-                        src={currentTrack}
-                        playing={isPlaying}
-                        loop={true}
-                        volume={volume}
-                        onEnd={nextTrack}
-                    />
-                )}
+                {({ isPlaying, volume, currentTrack, nextTrack }) => {
+                    return (
+                        <ReactHowler
+                            src={currentTrack}
+                            playing={isPlaying}
+                            loop={true}
+                            volume={volume}
+                            onEnd={nextTrack}
+                        />
+                    );
+                }}
             </AuthContext.Consumer>
             <Component {...pageProps} />
             <ToastContainer autoClose={3000} />
             <Footer />
         </AuthProvider>
     )
-
 }

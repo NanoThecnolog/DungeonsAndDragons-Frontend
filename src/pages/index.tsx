@@ -22,24 +22,18 @@ export default function Home() {
         event.preventDefault();
 
         if (email === '' || password === '') {
-            //colocar um toastify aqui
             toast.warning("Preencha com email e senha para logar")
             return;
         }
-
         setLoading(true);
-
         let data = {
             email,
             password
         }
         console.log("Tentando realizar login com: ", data);
         await signIn(data)
-
         setLoading(false);
     }
-
-
     return (
         <>
             <Head>
@@ -57,7 +51,6 @@ export default function Home() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-
                             <Input
                                 placeholder="Digite sua senha"
                                 type="password"
@@ -72,15 +65,12 @@ export default function Home() {
                             <a className={styles.text}>Não possui uma conta?<br /> Crie uma agora!</a>
                         </Link>
                     </div>
-
                 </div>
-
             </div>
         </>
     )
 }
 export const getServerSideProps = canSSRGuest(async (ctx) => {
-
     console.log("canSSRGuest executado");
     return {
         props: {}
