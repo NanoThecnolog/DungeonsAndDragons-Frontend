@@ -69,6 +69,7 @@ interface SkillComponentProps {
 }
 export default function Char({ skills }: SkillComponentProps) {
     const [currentComponent, setCurrentComponent] = useState('A');
+    const [title, setTitle] = useState('');
 
     const router = useRouter();
     const [id, setId] = useState(null);
@@ -76,6 +77,18 @@ export default function Char({ skills }: SkillComponentProps) {
     const [update, setUpdate] = useState(false)
 
     // const [skillsList, setSkillsList] = useState<SkillProps>(null)
+
+    useEffect(() => {
+        if (currentComponent === 'A') {
+            setTitle('Geral');
+        } else if (currentComponent === 'B') {
+            setTitle('Sobre')
+        } else if (currentComponent === 'C') {
+            setTitle('Inventário');
+        } else if (currentComponent === 'D') {
+            setTitle('Magias');
+        }
+    }, [currentComponent]);
 
 
     useEffect(() => {
@@ -117,6 +130,8 @@ export default function Char({ skills }: SkillComponentProps) {
         return <div className={styles.loading}>Carregando...</div>
     }
 
+
+
     function renderComponent() {
         if (currentComponent === 'A') {
             return (
@@ -128,10 +143,13 @@ export default function Char({ skills }: SkillComponentProps) {
                 </>
             )
         } else if (currentComponent === 'B') {
+
             return <Sobre charData={charData} />
         } else if (currentComponent === 'C') {
+
             return <Bag />
         } else if (currentComponent === 'D') {
+
             return <Spells />
         }
     }
@@ -139,7 +157,7 @@ export default function Char({ skills }: SkillComponentProps) {
     return (
         <>
             <Head>
-                <title>Detalhes do Personagem - D&D</title>
+                <title>{title} - D&D</title>
             </Head>
             <Header />
             <div className={styles.container}>
