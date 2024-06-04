@@ -1,10 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { parseCookies } from "nookies";
-
-
-
-
-
 //para definir paginas acessadas por visitantes
 
 export function canSSRGuest<P extends { [key: string]: any }>(fn: GetServerSideProps<P>) {

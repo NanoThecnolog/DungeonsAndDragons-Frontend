@@ -49,9 +49,10 @@ export const AuthContext = createContext({} as AuthContextData)
 export function signOut() {
     try {
         destroyCookie(undefined, '@d&d.token')
-        Router.push('/')
-    } catch {
-        console.log('erro ao deslogar')
+        Router.replace('/')
+    } catch (err) {
+        toast.error("Erro ao deslogar.")
+        console.log('Erro ao deslogar', err)
 
     }
 }
@@ -98,6 +99,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 //deslog do usuario em caso de erro.
                 signOut();
             })
+        } else {
+            Router.replace('/');
         }
     }, [])
 
@@ -135,7 +138,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         } catch (err: any) {
 
             if (err.request.status === 400) {
-                toast.error(err.response.data.error)
+                console.log(err.response.data.error);
+                toast.error("Erro ao Acessar.")
 
 
             }

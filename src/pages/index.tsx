@@ -1,17 +1,11 @@
 import { useContext, FormEvent, useState } from "react";
-
 import Head from "next/head"
-
 import styles from "../../styles/home.module.scss";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/Button";
-
 import { AuthContext } from "@/contexts/AuthContext";
 import { toast } from "react-toastify";
-
 import Link from "next/link";
-
 import { canSSRGuest } from "@/utils/canSSRGuest";
 
 
@@ -22,7 +16,6 @@ export default function Home() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
-
     const [loading, setLoading] = useState(Boolean);
 
     async function handleLogin(event: FormEvent) {
@@ -40,6 +33,7 @@ export default function Home() {
             email,
             password
         }
+        console.log("Tentando realizar login com: ", data);
         await signIn(data)
 
         setLoading(false);
@@ -70,11 +64,7 @@ export default function Home() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <Button
-                                type="submit"
-                                loading={loading}
-
-                            >
+                            <Button type="submit" loading={loading}>
                                 Acessar
                             </Button>
                         </form>
@@ -90,6 +80,8 @@ export default function Home() {
     )
 }
 export const getServerSideProps = canSSRGuest(async (ctx) => {
+
+    console.log("canSSRGuest executado");
     return {
         props: {}
     }

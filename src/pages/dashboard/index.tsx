@@ -51,7 +51,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [avatar, setAvatar] = useState(user.avatar);
-    const [userId, setUserId] = useState(user.id);
+    // const [userId, setUserId] = useState(user.id);
     const [char, setChar] = useState(charList || []);
     const [charLimit, setCharLimit] = useState('5');
     const apiClient = setupAPIClient();
@@ -152,15 +152,26 @@ export default function Dashboard({ user, charList }: HomeProps) {
 export const getServerSideProps = canSSRAuth(async (ctx) => {
 
     const apiClient = setupAPIClient(ctx);
-    const response = await apiClient.get('/me')
-    const charList = await apiClient.get('/char/list')
-    //console.log(charList.data);
+    try {
+        const response = await apiClient.get('/me')
+        const charList = await apiClient.get('/char/list')
+        console.log("Dados do usuario em Dashboard: ", response.data);
+        console.log("Lista de personagens em Dashboard: ", charList.data);
 
-
-    return {
-        props: {
-            user: response.data,
-            charList: charList.data
+        return {
+            props: {
+                user: response.data,
+                charList: charList.data
+            }
         }
+    } catch (err) {
+        console.log("Erro ao buscar dados com a API", err)
+
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        };
     }
 })

@@ -9,8 +9,10 @@ export function canSSRAuth<P extends { [key: string]: any }>(fn: GetServerSidePr
         const cookies = parseCookies(ctx);
 
         const token = cookies['@d&d.token'];
+        console.log('Verificando token no canSSRAuth:', token);
 
         if (!token) {
+            console.log('Token não encontrado, redirecionando para a página de login');
             return {
                 redirect: {
                     destination: '/',
@@ -23,17 +25,27 @@ export function canSSRAuth<P extends { [key: string]: any }>(fn: GetServerSidePr
             return await fn(ctx);
         } catch (err) {
             if (err instanceof AuthTokenError) {
+                console.log('Erro de autenticação, destruindo cookie e redirecionando', err);
                 destroyCookie(ctx, '@d&d.token');
-
-
+                return {
+                    redirect: {
+                        destination: '/',
+                        permanent: false
+                    }
+                }
+            } else {
+                console.log('Erro inesperado durante execução de codigo getServerSideProps', err);
             }
             return {
                 redirect: {
                     destination: '/',
-                    permanent: false
+                    permanent: false,
                 }
-            }
+            };
         }
+
+
+
 
 
     }

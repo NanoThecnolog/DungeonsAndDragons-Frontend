@@ -1,0 +1,11 @@
+.editar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    transition: all 0.5s;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.2);
+    }
+}

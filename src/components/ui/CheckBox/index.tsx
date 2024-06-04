@@ -3,7 +3,7 @@ import { ReactNode, InputHTMLAttributes } from 'react';
 
 
 interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
-    children: ReactNode,
+    children?: ReactNode,
 
 
 }
