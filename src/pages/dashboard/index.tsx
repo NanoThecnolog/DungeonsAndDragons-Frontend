@@ -151,27 +151,31 @@ export default function Dashboard({ user, charList }: HomeProps) {
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
 
-    const apiClient = setupAPIClient(ctx);
-    try {
-        const response = await apiClient.get('/me')
-        const charList = await apiClient.get('/char/list')
-        console.log("Dados do usuario em Dashboard: ", response.data);
-        console.log("Lista de personagens em Dashboard: ", charList.data);
+    // const apiClient = setupAPIClient(ctx);
+    // try {
+    //     const response = await apiClient.get('/me')
+    //     const charList = await apiClient.get('/char/list')
+    //     console.log("Dados do usuario em Dashboard: ", response.data);
+    //     console.log("Lista de personagens em Dashboard: ", charList.data);
 
-        return {
-            props: {
-                user: response.data,
-                charList: charList.data
-            }
-        }
-    } catch (err) {
-        console.log("Erro ao buscar dados com a API", err)
+    //     return {
+    //         props: {
+    //             user: response.data,
+    //             charList: charList.data
+    //         }
+    //     }
+    // } catch (err) {
+    //     console.log("Erro ao buscar dados com a API", err)
 
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            }
-        };
+    //     return {
+    //         redirect: {
+    //             destination: '/',
+    //             permanent: false,
+    //         }
+    //     };
+    // }
+
+    return {
+        props: {}
     }
 })

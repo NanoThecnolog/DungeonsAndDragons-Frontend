@@ -75,7 +75,7 @@ interface SkillComponentProps {
     skills: SkillProps | null
     usuario: UserProps
 }
-export default function Char({ skills, usuario }: SkillComponentProps) {
+export default function Char({ skills, /*usuario*/ }: SkillComponentProps) {
     const [currentComponent, setCurrentComponent] = useState('A');
     const [title, setTitle] = useState('');
 
@@ -191,21 +191,21 @@ export default function Char({ skills, usuario }: SkillComponentProps) {
     )
 }
 export const getServerSideProps = canSSRAuth(async (ctx) => {
-    const apiClient = setupAPIClient(ctx);
+    // const apiClient = setupAPIClient(ctx);
     const apiClientExternal = setupAPIClientExternal();
     try {
 
         const responseSkills = await apiClientExternal.get("/api/skills")
         const skills = responseSkills.data
 
-        const response = await apiClient.get('./me')
-        const usuario = response.data
-        console.log("dados do usuario na pagina char: ", usuario)
+        // const response = await apiClient.get('./me')
+        // const usuario = response.data
+        // console.log("dados do usuario na pagina char: ", usuario)
 
         return {
             props: {
                 skills,
-                usuario
+                // usuario
             }
         }
     } catch (err) {
@@ -213,7 +213,7 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
         return {
             props: {
                 skills: null,
-                usuario: null
+                // usuario: null
 
             }
         }
