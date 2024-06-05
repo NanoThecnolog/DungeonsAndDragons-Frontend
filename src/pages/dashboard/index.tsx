@@ -71,7 +71,6 @@ export default function Dashboard({ user, charList }: HomeProps) {
         } catch (err) {
             console.log("Erro ao deletar o personagem", err)
             toast.error("Erro ao excluir o personagem!");
-
         }
     }
 

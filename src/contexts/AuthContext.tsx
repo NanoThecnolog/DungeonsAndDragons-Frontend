@@ -56,12 +56,9 @@ export function signOut() {
 
     }
 }
-
-
-
 export function AuthProvider({ children }: AuthProviderProps) {
 
-    const [user, setUser] = useState<UserProps>({ id: '', name: '', email: '', avatar: null })
+    const [user, setUser] = useState<UserProps>()
     const isAuthenticated = !!user;
 
     const [isPlaying, setIsPlaying] = useState(true);
@@ -96,10 +93,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     avatar
                 })
             }).catch(() => {
+                console.log("Catch do useEffect no authcontext, chamando função signOut")
                 //deslog do usuario em caso de erro.
                 signOut();
             })
         } else {
+            console.log("Else do if que verifica o token no useEffect do authcontext.")
             Router.replace('/');
         }
     }, [])
@@ -129,7 +128,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             //passando o token para outras requisições
 
             api.defaults.headers['Authorization'] = `Bearer ${token}`;
-
+            console.log("função signIn redirecionando pro dashboard em caso de login bem sucedido")
             //mandar para o dashboard, inicio do sistema, qualquer coisa do tipo
             toast.success("Bem vindo, jogador!");
             Router.push('/dashboard');
@@ -139,16 +138,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
             if (err.request.status === 400) {
                 console.log(err.response.data.error);
                 toast.error("Erro ao Acessar.")
-
-
             }
             console.log('Erro no signIn: ', err);
-
-
         }
-
-
-
     }
     async function signUp({ name, email, password }: SignUpProps) {
         try {
@@ -158,7 +150,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 email,
                 password
             })
-            //colocar um toastify aqui
+
+            console.log("log de conta criada com sucesso em signUp")
             toast.success("Conta criada com sucesso!")
             //console.log(response.data);
 

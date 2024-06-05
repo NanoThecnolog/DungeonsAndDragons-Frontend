@@ -4,7 +4,7 @@ import { parseCookies } from "nookies";
 
 export function canSSRGuest<P extends { [key: string]: any }>(fn: GetServerSideProps<P>) {
     return async (ctx: GetServerSidePropsContext): Promise<GetServerSidePropsResult<P>> => {
-
+        console.log("canSSRGuest sendo executado.")
         const cookies = parseCookies(ctx);
 
 
