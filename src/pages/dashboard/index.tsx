@@ -10,6 +10,8 @@ import { IoIosSettings } from "react-icons/io"
 import { setupAPIClient } from "@/services/api"
 import { toast } from "react-toastify"
 
+
+
 //estipular limite de 5 personagens? criar uma opção de virar doador e permitir criação de mais personagens, ou retirada do limite?
 //criar funcionalidades para doadores? preciso ganhar dinheiro....
 //funcionalidade de selecionar trilha sonora?
@@ -74,6 +76,8 @@ export default function Dashboard({ user, charList }: HomeProps) {
         }
     }
 
+
+
     return (
         <>
             <Head>
@@ -135,6 +139,7 @@ export default function Dashboard({ user, charList }: HomeProps) {
                                     char_class={item.char_class}
                                     image={item.image}
                                     onDelete={handleDeleteChar}
+                                    loading={false}
                                 />
                             ))
                         ) : (

@@ -250,11 +250,12 @@
         transform: scale(1.1)
     }
 
-    input {
-        margin: 0 5px;
+    .checkBox {
+        margin: 0.6rem 0;
 
-        &:checked~.checkmark {
-            background-color: red;
+
+        .checkText {
+            margin-left: 0.5rem;
         }
     }
 }

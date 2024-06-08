@@ -1,5 +1,8 @@
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import styles from './styles.module.scss'
 import { FaTrash } from 'react-icons/fa'
+import { FaSpinner } from 'react-icons/fa';
 import Link from 'next/link';
 import Swal from 'sweetalert2'
 
@@ -17,8 +20,20 @@ interface CharProps {
     char_class: ClassProps[];
     image: string | null;
     onDelete: (id: string) => Promise<void>;
+    loading: boolean;
 }
-export default function Card({ id, name, title, race, char_class, image, onDelete }: CharProps) {
+export default function Card({ id, name, title, race, char_class, image, onDelete, loading }: CharProps) {
+
+    const [isLoading, setIsLoading] = useState(loading);
+
+    const router = useRouter();
+
+    function handleOnClick(id: string) {
+        setIsLoading(true);
+
+        router.push(`/char?id=${id}`)
+        // setIsLoading(false);
+    }
 
     async function handleDeleteChar(id: string) {
 
@@ -38,12 +53,16 @@ export default function Card({ id, name, title, race, char_class, image, onDelet
         });
     }
 
-
     return (
         <>
             <div className={styles.containerCard} style={{ backgroundImage: `url(http://localhost:3333/files/${image})` }}>
                 <div className={styles.blur}>
-                    <Link href={`/char?id=${id}`} className={styles.cardLink}>
+                    {isLoading && (
+                        <div className={styles.loading}>
+                            <FaSpinner size={25} />
+                        </div>
+                    )}
+                    <div className={styles.cardLink} onClick={() => handleOnClick(id)}>
                         <div>
                             <h3 className={styles.textName}>{name}</h3>
                             {title && (
@@ -59,8 +78,8 @@ export default function Card({ id, name, title, race, char_class, image, onDelet
                                 </div>
                             ))}
                         </div>
-                    </Link>
-                    <button type='button' title="excluir personagem" onClick={() => handleDeleteChar(id)}>
+                    </div>
+                    <button className={styles.lixeira} type='button' title="excluir personagem" onClick={() => handleDeleteChar(id)}>
                         <FaTrash size={20} />
                     </button>
 

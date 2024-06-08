@@ -43,8 +43,12 @@
 
         .userSettings {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             width: 30%;
+
+            h2 {
+                margin-right: 0.5rem;
+            }
         }
 
         .userData {

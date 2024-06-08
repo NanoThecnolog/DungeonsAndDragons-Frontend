@@ -66,16 +66,22 @@ interface SkillProps {
     count: number
     results: ResultsSkillsProps[];
 }
-type UserProps = {
-    id: string;
-    name: string;
-    email: string;
+type SpellsProps = {
+    index: string,
+    name: string,
+    level: number,
+    url: string
+}
+type SpellsDataProps = {
+    count: number;
+    results: SpellsProps[];
+
 }
 interface SkillComponentProps {
     skills: SkillProps | null
-    usuario: UserProps
+    spells: SpellsDataProps
 }
-export default function Char({ skills, /*usuario*/ }: SkillComponentProps) {
+export default function Char({ skills, spells }: SkillComponentProps) {
     const [currentComponent, setCurrentComponent] = useState('A');
     const [title, setTitle] = useState('');
 
@@ -138,7 +144,7 @@ export default function Char({ skills, /*usuario*/ }: SkillComponentProps) {
 
 
 
-    if (!charData || !skills) {
+    if (!charData || !skills || !spells) {
         return <div className={styles.loading}>Carregando...</div>
     }
 
@@ -162,7 +168,7 @@ export default function Char({ skills, /*usuario*/ }: SkillComponentProps) {
             return <Bag />
         } else if (currentComponent === 'D') {
 
-            return <Spells />
+            return <Spells charData={charData} spells={spells} />
         }
     }
 
@@ -191,21 +197,20 @@ export default function Char({ skills, /*usuario*/ }: SkillComponentProps) {
     )
 }
 export const getServerSideProps = canSSRAuth(async (ctx) => {
-    // const apiClient = setupAPIClient(ctx);
     const apiClientExternal = setupAPIClientExternal();
     try {
 
         const responseSkills = await apiClientExternal.get("/api/skills")
         const skills = responseSkills.data
 
-        // const response = await apiClient.get('./me')
-        // const usuario = response.data
-        // console.log("dados do usuario na pagina char: ", usuario)
+        const responseSpells = await apiClientExternal.get("/api/spells")
+        const spells = responseSpells.data
 
+        console.log("Buscando perícias e magias na api externa, do lado do servidor, em char.")
         return {
             props: {
-                skills,
-                // usuario
+                skills: skills,
+                spells: spells
             }
         }
     } catch (err) {
@@ -213,7 +218,7 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
         return {
             props: {
                 skills: null,
-                // usuario: null
+                spells: null
 
             }
         }

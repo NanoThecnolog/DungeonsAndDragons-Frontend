@@ -310,15 +310,21 @@ export default function Geral({ charData, skills }: CharDataProps) {
                                             <h3>Resistencia a morte</h3>
                                             {char.death_saving_throws}
                                             <div>
-                                                <CheckBox>
-                                                    Primeira morte
-                                                </CheckBox>
-                                                <CheckBox>
-                                                    Segunda morte
-                                                </CheckBox>
-                                                <CheckBox>
-                                                    Terceira morte
-                                                </CheckBox>
+                                                <div className={styles.checkBox}>
+                                                    <CheckBox>
+                                                        <p className={styles.checkText}>Primeira morte</p>
+                                                    </CheckBox>
+                                                </div>
+                                                <div className={styles.checkBox}>
+                                                    <CheckBox>
+                                                        <p className={styles.checkText}>Segunda morte</p>
+                                                    </CheckBox>
+                                                </div>
+                                                <div className={styles.checkBox}>
+                                                    <CheckBox>
+                                                        <p className={styles.checkText}>Terceira morte</p>
+                                                    </CheckBox>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
