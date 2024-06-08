@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { canSSRAuth } from "@/utils/canSSRAuth"
 import Head from "next/head"
 import { Header } from "@/components/Header";
@@ -48,20 +48,43 @@ interface HomeProps {
 }
 
 
-export default function Dashboard({ user, charList }: HomeProps) {
-    console.log("Renderizando Dashboard ", { user, charList });
+export default function Dashboard(/**{ user, charList }: HomeProps */) {
+    console.log("Renderizando Dashboard ");
 
-    const [name, setName] = useState(user.name);
-    const [email, setEmail] = useState(user.email);
-    const [avatar, setAvatar] = useState(user.avatar);
+    const [name, setName] = useState<string>();
+    const [email, setEmail] = useState<string>();
+    const [avatar, setAvatar] = useState<string | null>();
     // const [userId, setUserId] = useState(user.id);
-    const [char, setChar] = useState(charList || []);
+    const [char, setChar] = useState<CharProps[]>([]);
     const [charLimit, setCharLimit] = useState('5');
     const apiClient = setupAPIClient();
+
+    useEffect(() => {
+        async function handleInfo() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get('/me')
+                const charList = await apiClient.get('/char/list')
+                console.log("Dados do usuario em Dashboard: ", response.data);
+                console.log("Lista de personagens em Dashboard: ", charList.data);
+                setName(response.data.name)
+                setEmail(response.data.email)
+                setAvatar(response.data.avatar)
+                setChar(charList.data)
+
+
+            } catch (err) {
+                console.log("Erro ao buscar dados com a API", err);
+            }
+
+        }
+        handleInfo();
+    }, [])
 
     async function handleDeleteChar(id: string) {
         // console.log(id)
         try {
+
             await apiClient.delete('/char', {
                 params: {
                     id: id
@@ -86,69 +109,75 @@ export default function Dashboard({ user, charList }: HomeProps) {
             <Header />
             <main className={styles.container}>
                 <h1>Dashboard</h1>
-                <section>
-                    <div className={styles.containerPerfil}>
-                        <div className={styles.userSettings}>
-                            <h2>Perfil</h2>
-                            <Link href="/me">
-                                <button title="Editar informações da conta">
-                                    <IoIosSettings size={25} />
-                                </button>
-                            </Link>
-                        </div>
-                        <div className={styles.userData}>
-                            <div className={styles.data}>
-                                <p>Nome:</p>
-                                <p>{name}</p>
-                            </div>
-                            <div className={styles.data}>
-                                <p>Email:</p>
-                                <p>{email}</p>
-                            </div>
-                            <div className={styles.data}>
-                                <p>Personagens:</p>
-                                <p>{char.length}/{charLimit}</p>
-                            </div>
-                            <div className={styles.avatar}>
-                                {avatar ? avatar : "sem avatar"}
-                            </div>
-                        </div>
-                    </div>
-                    <div className={styles.containerCard}>
-                        <div className={styles.charList}>
-                            <h2>Personagens</h2>
-                            {char.length >= Number(charLimit) ? '' : (
-                                <Link href="/new_char">
-                                    <button type="button" title="Criar Personagem!">
-                                        <FaPlusCircle size={20} />
+                {!name ? (
+                    <div>Carregando...</div>
+
+                ) : (
+                    <section>
+                        <div className={styles.containerPerfil}>
+                            <div className={styles.userSettings}>
+                                <h2>Perfil</h2>
+                                <Link href="/me">
+                                    <button title="Editar informações da conta">
+                                        <IoIosSettings size={25} />
                                     </button>
                                 </Link>
+                            </div>
+                            <div className={styles.userData}>
+                                <div className={styles.data}>
+                                    <p>Nome:</p>
+                                    <p>{name}</p>
+                                </div>
+                                <div className={styles.data}>
+                                    <p>Email:</p>
+                                    <p>{email}</p>
+                                </div>
+                                <div className={styles.data}>
+                                    <p>Personagens:</p>
+                                    <p>{char.length}/{charLimit}</p>
+                                </div>
+                                <div className={styles.avatar}>
+                                    {avatar ? avatar : "sem avatar"}
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.containerCard}>
+                            <div className={styles.charList}>
+                                <h2>Personagens</h2>
+                                {char.length >= Number(charLimit) ? '' : (
+                                    <Link href="/new_char">
+                                        <button type="button" title="Criar Personagem!">
+                                            <FaPlusCircle size={20} />
+                                        </button>
+                                    </Link>
+                                )}
+
+
+                            </div>
+
+                            {char.length >= 1 ? (
+                                char.map(item => (
+                                    <Card
+                                        key={item.id}
+                                        id={item.id}
+                                        name={item.name}
+                                        race={item.race}
+                                        title={item.title}
+                                        char_class={item.char_class}
+                                        image={item.image}
+                                        onDelete={handleDeleteChar}
+                                        loading={false}
+                                    />
+                                ))
+                            ) : (
+                                <div>Nenhum personagem foi criado</div>
                             )}
 
 
                         </div>
+                    </section>
+                )}
 
-                        {char.length >= 1 ? (
-                            char.map(item => (
-                                <Card
-                                    key={item.id}
-                                    id={item.id}
-                                    name={item.name}
-                                    race={item.race}
-                                    title={item.title}
-                                    char_class={item.char_class}
-                                    image={item.image}
-                                    onDelete={handleDeleteChar}
-                                    loading={false}
-                                />
-                            ))
-                        ) : (
-                            <div>Nenhum personagem foi criado</div>
-                        )}
-
-
-                    </div>
-                </section>
             </main>
         </>
     )
@@ -156,26 +185,8 @@ export default function Dashboard({ user, charList }: HomeProps) {
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
 
-    const apiClient = setupAPIClient(ctx);
-    try {
-        const response = await apiClient.get('/me')
-        const charList = await apiClient.get('/char/list')
-        console.log("Dados do usuario em Dashboard: ", response.data);
-        console.log("Lista de personagens em Dashboard: ", charList.data);
-
-        return {
-            props: {
-                user: response.data,
-                charList: charList.data
-            }
-        }
-    } catch (err) {
-        console.log("Erro ao buscar dados com a API", err);
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
+    return {
+        props: {}
     }
+
 })
