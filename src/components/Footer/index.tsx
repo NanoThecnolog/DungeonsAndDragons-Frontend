@@ -13,6 +13,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 export default function Footer() {
 
     const { isPlaying, volume, togglePlayPause, setVolume } = useContext(AuthContext);
+    const volumePerCent = volume * 100
 
     return (
         <>
@@ -23,7 +24,7 @@ export default function Footer() {
                             {isPlaying ? <FaPause /> : <FaPlay />}
                         </button>
                         <input
-                            title="volume"
+                            title={volumePerCent.toString()}
                             className={styles.volume}
                             type="range"
                             min="0"
@@ -37,41 +38,31 @@ export default function Footer() {
                 </div>
                 <div className={styles.footer}>
                     <div className={styles.informacao}>
-                        <ul>
-                            <li>
-                                informação normal
-                            </li>
-                            <li>
-                                informação interessante
-                            </li>
-                            <li>
-                                informação inútil
-                            </li>
-                            <li>
-                                informação extraordinária
-                            </li>
-                        </ul>
+                        <div><p>Política de Privacidade</p></div>
+                        <div><p>Perguntas frequentes</p></div>
+                        <Link href='/livro-do-jogador.pdf' target="_blank" rel="noopener noreferrer">
+                            <div>
+                                <p>Livro do Jogador</p>
+                            </div>
+                        </Link>
                     </div>
-                    <div className={styles.links}>
-                        <ul>
-                            <li>link 1</li>
-                            <li>link dos</li>
-                            <li>link três</li>
-                            <li>link four</li>
-                        </ul>
+                    <div className={styles.informacao}>
+                        <div><p>Seja um apoiador</p></div>
+                        <div><p>Trabalhe conosco</p></div>
                     </div>
-                    <div className={styles.contato}>
+                    <div className={styles.informacao}>
                         <div>
                             <Link className={styles.link} target="_blank" href={"https://www.instagram.com/ericsson.costagomes/"}>
-                                <button title="Instagram"><FaInstagram size={45} /></button>
+                                <button title="Instagram"><FaInstagram size={35} /></button>
                             </Link>
                             <Link className={styles.link} target="_blank" href={"https://github.com/NanoThecnolog/DungeonsAndDragons-Frontend"}>
-                                <button title="Repositório"><FaGithub size={45} /></button>
+                                <button title="Repositório"><FaGithub size={35} /></button>
                             </Link>
                             <Link className={styles.link} target="_blank" href={"https://www.dnd5eapi.co/"}>
-                                <button title="D&D API"><FaDiceD20 size={45} /></button>
+                                <button title="D&D API"><FaDiceD20 size={35} /></button>
                             </Link>
                         </div>
+
 
                     </div>
                     <div className={styles.copyRight}>

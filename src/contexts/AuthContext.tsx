@@ -27,6 +27,7 @@ type UserProps = {
     name: string;
     email: string;
     avatar: string | null;
+    char_limit: number;
 }
 
 type SignInProps = {
@@ -63,14 +64,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const [isPlaying, setIsPlaying] = useState(true);
     const [volume, setVolume] = useState(0.5);
-    const [currentTrack, setCurrentTrack] = useState('./Morrowind-soundtrack.mp3')
+    const [currentTrack, setCurrentTrack] = useState('./Diggy-Diggy-Hole.mp3')
 
     const tracks = [
         './Morrowind-soundtrack.mp3',
         './The-Dragonborn-comes.mp3',
         './Dragonborn.mp3',
         './Awake.mp3',
-        './Queen-of-lost-world.mp3'
+        './Queen-of-lost-world.mp3',
+        './Diggy-Diggy-Hole.mp3'
     ];
     const nextTrack = () => {
         const randomIndex = Math.floor(Math.random() * tracks.length);
@@ -78,19 +80,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setCurrentTrack(tracks[randomIndex]);
     }
 
-
     useEffect(() => {
         const { '@d&d.token': token } = parseCookies();
 
         if (token) {
             api.get('/me').then(response => {
-                const { id, name, email, avatar } = response.data;
+                const { id, name, email, avatar, char_limit } = response.data;
 
                 setUser({
                     id,
                     name,
                     email,
-                    avatar
+                    avatar,
+                    char_limit
                 })
             }).catch(() => {
                 console.log("Catch do useEffect no authcontext, chamando função signOut")
@@ -123,6 +125,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 name,
                 email,
                 avatar: null,
+                char_limit: 5,
             });
 
             //passando o token para outras requisições
@@ -148,7 +151,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const response = await api.post('/users', {
                 name,
                 email,
-                password
+                password,
+
             })
 
             console.log("log de conta criada com sucesso em signUp")

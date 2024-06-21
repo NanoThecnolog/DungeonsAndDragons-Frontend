@@ -55,6 +55,7 @@
         padding: 0.5rem;
         margin: 0.5rem;
         position: relative;
+        background-color: var(--backgroundColor);
 
         transition: all 0.5s;
 
@@ -75,6 +76,7 @@
         padding: 0.5rem;
         margin: 0.5rem;
         position: relative;
+        background-color: var(--backgroundColor);
 
         transition: all 0.5s;
 
@@ -95,6 +97,7 @@
         padding: 0.5rem;
         margin: 0.5rem;
         position: relative;
+        background-color: var(--backgroundColor);
 
         transition: all 0.5s;
 
@@ -115,6 +118,7 @@
         padding: 0.5rem;
         margin: 0.5rem;
         position: relative;
+        background-color: var(--backgroundColor);
 
         transition: all 0.5s;
 
@@ -135,6 +139,7 @@
         padding: 0.5rem;
         margin: 0.5rem;
         position: relative;
+        background-color: var(--backgroundColor);
 
         transition: all 0.5s;
 
@@ -155,6 +160,7 @@
         padding: 0.5rem;
         margin: 0.5rem;
         position: relative;
+        background-color: var(--backgroundColor);
 
         transition: all 0.5s;
 
@@ -175,6 +181,7 @@
         padding: 2rem 0.5rem 0.5rem 0.5rem;
         margin: 0.5rem;
         position: relative;
+        background-color: var(--backgroundColor);
 
         transition: all 0.5s;
 
@@ -186,12 +193,24 @@
             width: 100%;
             height: 100%;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            margin-top: 1rem;
 
             span+span {
                 margin: 0 0.1rem;
             }
+        }
+
+        .profMap {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
         }
     }
 
@@ -207,19 +226,19 @@
         padding: 2rem 0.5rem 0.5rem 0.5rem;
         margin: 0.5rem;
         position: relative;
-
+        background-color: var(--backgroundColor);
         transition: all 0.5s;
 
         &:hover {
             transform: scale(1.1)
         }
 
-
         .textStory {
             margin: 0.9rem 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            padding: 0.2rem 0.5rem;
+            overflow-y: scroll;
             border-radius: 0.5rem;
+            text-align: justify;
         }
     }
 
@@ -235,6 +254,7 @@
         padding: 0.5rem;
         margin: 0.5rem;
         position: relative;
+        background-color: var(--backgroundColor);
 
         transition: all 0.5s;
 

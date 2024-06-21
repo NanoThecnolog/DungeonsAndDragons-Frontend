@@ -3,12 +3,9 @@ import styles from './styles.module.scss'
 import { TbSettings } from "react-icons/tb";
 
 export default function Sobre({ charData }) {
-
-
     const { char, charClass } = charData
     const [level, setLevel] = useState(1)
 
-    // console.log(charClass)
     useEffect(() => {
         if (charClass.length > 1) {
             const somaLevel = Number(charClass[0].level) + Number(charClass[1].level)
@@ -18,8 +15,6 @@ export default function Sobre({ charData }) {
             setLevel(level)
         }
     }, [charClass])
-    // console.log(level)
-    // console.log(char.languages)
 
     if (!charData) {
         return (
@@ -32,27 +27,36 @@ export default function Sobre({ charData }) {
         <>
             <div className={styles.container}>
                 <div className={styles.dataContainer}>
-
                     <div className={styles.row}>
                         <div className={styles.geral}>
                             <div className={styles.editar}><TbSettings size={25} /></div>
                             <h3>{char.name}</h3>
                             <p>{char.title}</p>
                             <p>Nível {level}</p>
-
                         </div>
                         <div className={styles.personalidade}>
                             <div className={styles.editar}><TbSettings size={25} /></div>
                             <h4>traços de personalidade</h4>
+                            <span>personalidade</span>
+                            <span>personalidade</span>
+                            <span>personalidade</span>
+                            <span>personalidade</span>
                         </div>
                         <div className={styles.ideais}>
                             <div className={styles.editar}><TbSettings size={25} /></div>
                             <h4>Ideais</h4>
-                            <p> {char.ideals}</p>
+                            <span>ideais</span>
+                            <span>ideais</span>
+                            <span>ideais</span>
+                            <span>ideais</span>
                         </div>
                         <div className={styles.caracteristicas}>
                             <div className={styles.editar}><TbSettings size={25} /></div>
                             <h4>Caracteristicas e Traços</h4>
+                            <span>Caracteristica</span>
+                            <span>Traço</span>
+                            <span>Caracteristica</span>
+                            <span>Traço</span>
                         </div>
                     </div>
                     <div className={styles.row}>
@@ -68,10 +72,17 @@ export default function Sobre({ charData }) {
                         <div className={styles.vinculos}>
                             <div className={styles.editar}><TbSettings size={25} /></div>
                             <h4>Vinculos</h4>
+                            <span>vinculo</span>
+                            <span>vinculo</span>
+                            <span>vinculo</span>
                         </div>
                         <div className={styles.defeitos}>
                             <div className={styles.editar}><TbSettings size={25} /></div>
                             <h4>Defeitos</h4>
+                            <span>defeito</span>
+                            <span>defeito</span>
+                            <span>defeito</span>
+                            <span>defeito</span>
                         </div>
                     </div>
                     <div className={styles.row}>
@@ -79,6 +90,7 @@ export default function Sobre({ charData }) {
                             <div className={styles.editar}><TbSettings size={25} /></div>
                             <h4>idiomas e proficiencias</h4>
                             <div className={styles.idiomasMap}>
+                                <h4>Idiomas</h4>
                                 {char.languages.map((language, index) => (
                                     <span key={index}>
                                         {language}
@@ -86,7 +98,14 @@ export default function Sobre({ charData }) {
                                     </span>
                                 ))}
                             </div>
-
+                            <div className={styles.profMap}>
+                                <h4>Proficiências</h4>
+                                <span>proficiencia</span>
+                                <span>proficiencia</span>
+                                <span>proficiencia</span>
+                                <span>proficiencia</span>
+                                <span>proficiencia</span>
+                            </div>
                         </div>
                         <div className={styles.historia}>
                             <div className={styles.editar}><TbSettings size={25} /></div>
@@ -108,7 +127,6 @@ export default function Sobre({ charData }) {
                             <p>{char.allies}</p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </>

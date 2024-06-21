@@ -1,11 +1,12 @@
 import styles from './styles.module.scss'
 import CheckBox from '../ui/CheckBox'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Editar from '../ui/Config'
-import Modal from 'react-modal'
+// import Modal from 'react-modal'
 import { setupAPIClientExternal } from '@/services/apiD&D/apiExternal'
 import ModalSpellFilter from '../ModalSpellsFilter'
 import { toast } from 'react-toastify'
+import { setupAPIClient } from '@/services/api'
 
 type DataProps = {
     id: string;
@@ -27,6 +28,7 @@ type DataProps = {
     temporary_hp: String;
     experience: string;
     armor_class: string;
+    spells: string[];
     ideals: string;
     bonds: string[];
     flaws: string[];
@@ -114,11 +116,10 @@ export type SpellInfoProps = {
 
 export default function Spells({ charData, spells }: CharDataProps) {
     // console.log(spells);
-
+    const apiClient = setupAPIClient();
     const [modalItem, setModalItem] = useState()
     const [modalVisible, setModalVisible] = useState(false)
-
-
+    const charSpells = charData.char.spells;
     const { name, title } = charData.char;
     const charClass = charData.charClass;
 
@@ -135,8 +136,54 @@ export default function Spells({ charData, spells }: CharDataProps) {
 
     const [filtred, setFiltred] = useState<FilterSpellProps[]>([])
     const [spellInfo, setSpellInfo] = useState<SpellInfoProps[]>([])
+    const [spellsList, setSpellsList] = useState<SpellInfoProps[]>([])
 
     const [selectedSpell, setSelectedSpell] = useState<SpellInfoProps[]>([])
+
+    useEffect(() => {
+        async function setSpellsInfo() {
+            console.log("iniciando o useEffect");
+            try {
+                const spellsInfo = await spellMap();
+                console.log("spellsInfo: ", spellsInfo);
+                setSpellsList(spellsInfo);
+            } catch (err) {
+                console.log("Erro ao setar as informações das magias", err)
+            }
+        }
+        setSpellsInfo();
+
+
+
+    }, [])
+    useEffect(() => {
+        async function handleSpellSelect() {
+
+            await spellsList.map((item) => {
+                console.log("Item no map", item.level)
+                const spellSetters: { [key: number]: React.Dispatch<React.SetStateAction<SpellInfoProps[]>> } = {
+                    0: setTruques,
+                    1: setSpell1,
+                    2: setSpell2,
+                    3: setSpell3,
+                    4: setSpell4,
+                    5: setSpell5,
+                    6: setSpell6,
+                    7: setSpell7,
+                    8: setSpell8,
+                    9: setSpell9,
+                };
+                const setter = spellSetters[item.level];
+                if (setter) {//editar esse bloco para que não seja adicionado mais um. Mudar para atualizar as listas.
+                    setter((prevSpells) => [...prevSpells, item]);
+                } else {
+                    console.warn(`Nenhum setter encontrado para o nível ${item.level}`);
+                }
+            })
+        }
+        handleSpellSelect();
+
+    }, [spellsList])
 
 
 
@@ -144,10 +191,6 @@ export default function Spells({ charData, spells }: CharDataProps) {
         console.log("filtrando pelo level: ", level);
 
         const filtred = spells.results.filter(item => item.level === level);
-
-
-        setFiltred(filtred)
-
         try {
             const apiClient = setupAPIClientExternal();
 
@@ -173,33 +216,63 @@ export default function Spells({ charData, spells }: CharDataProps) {
     function handleCloseModal() {
         setModalVisible(false);
     }
-    function handleSpellSelect(spell: SpellInfoProps[]) {
-        if (spell[0].level === 0) {
-            setTruques(spell);
-        } else if (spell[0].level === 1) {
-            setSpell1(spell)
-        } else if (spell[0].level === 2) {
-            setSpell2(spell)
-        } else if (spell[0].level === 3) {
-            setSpell3(spell)
-        } else if (spell[0].level === 4) {
-            setSpell4(spell)
-        } else if (spell[0].level === 5) {
-            setSpell5(spell)
-        } else if (spell[0].level === 6) {
-            setSpell6(spell)
-        } else if (spell[0].level === 7) {
-            setSpell7(spell)
-        } else if (spell[0].level === 8) {
-            setSpell8(spell)
-        } else if (spell[0].level === 9) {
-            setSpell9(spell)
-        }
-        toast.success("Magias adicionadas.")
 
+
+    async function spellMap() {
+        const apiClientExternal = setupAPIClientExternal();
+        console.log("iniciando busca na api externa")
+        const promises = charSpells.map(async (item) => {
+            try {
+                const response = await apiClientExternal.get(`/api/spells/${item}`)
+                return response.data
+            } catch (err) {
+                console.log("erro ao buscar as magias na api Externa")
+            }
+        })
+        console.log("A busca terminou.")
+        const results = await Promise.all(promises);
+        console.log(results);
+        return results;
+    }
+    function handleSpellSelect() {
+        //modificar essa função para enviar o index das magias selecionadas para o banco de dados, editando o personagem no /char.
+
+        spellsList.map((item) => {
+            console.log("Item no map", item.level)
+            const spellSetters: { [key: number]: React.Dispatch<React.SetStateAction<SpellInfoProps[]>> } = {
+                0: setTruques,
+                1: setSpell1,
+                2: setSpell2,
+                3: setSpell3,
+                4: setSpell4,
+                5: setSpell5,
+                6: setSpell6,
+                7: setSpell7,
+                8: setSpell8,
+                9: setSpell9,
+            };
+            const setter = spellSetters[item.level];
+            if (setter) {
+                setter((prevSpells) => [...prevSpells, item]);
+                toast.success("Magias adicionadas.");
+            } else {
+                console.warn(`Nenhum setter encontrado para o nível ${item.level}`);
+            }
+        })
     }
 
-    Modal.setAppElement('#__next');
+    async function spellRequest() {
+
+        try {
+            await apiClient.put('/char')
+
+        } catch {
+            console.log("Erro ao salvar as magias no backend")
+        }
+    }
+
+
+    // Modal.setAppElement('#__next');
     return (
         <>
             <main className={styles.container}>
@@ -217,7 +290,7 @@ export default function Spells({ charData, spells }: CharDataProps) {
                     </div>
                     <div className={styles.row}>
                         {
-                            // criar o modal pra mostrar a variavel filtred e o personagem adicionar as magias. 
+                            //criar o modal pra mostrar a variavel filtred e o personagem adicionar as magias. ---ok
                             //salvar o nome das magias no banco de dados e fazer a requisição dos dados das magias pelo nome.
                             //apresentar os dados num modal, quando o jogador clicar na magia. Nesse modal apresentar os dados como:
                             //nome
@@ -247,7 +320,6 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {truques.map(spell => (
                                     <div key={spell.index}>
                                         <p>{spell.name}</p>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
                             </div>
@@ -265,7 +337,6 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {spell1.map(spell => (
                                     <div className={styles.spell} key={spell.index}>
                                         <h5>{spell.name}</h5>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
                             </div>
@@ -283,16 +354,8 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {spell2.map(spell => (
                                     <div className={styles.spell} key={spell.index}>
                                         <h5>{spell.name}</h5>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
-                                {/* {filtred.map(spell => (
-                                    <div className={styles.spell} key={spell.index}>
-                                        <h5>{spell.name}</h5>
-                                        <p>{spell.school.name}</p>
-                                    </div>
-                                ))} */}
-
                             </div>
                         </div>
                         <div className={styles.magias}>
@@ -308,16 +371,8 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {spell3.map(spell => (
                                     <div className={styles.spell} key={spell.index}>
                                         <h5>{spell.name}</h5>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
-                                {/* {filtred.map(spell => (
-                                    <div className={styles.spell} key={spell.index}>
-                                        <h5>{spell.name}</h5>
-                                        <p>{spell.casting_time}</p>
-                                    </div>
-                                ))} */}
-
                             </div>
                         </div>
                         <div className={styles.magias}>
@@ -333,7 +388,6 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {spell4.map(spell => (
                                     <div className={styles.spell} key={spell.index}>
                                         <h5>{spell.name}</h5>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
 
@@ -355,7 +409,6 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {spell5.map(spell => (
                                     <div className={styles.spell} key={spell.index}>
                                         <h5>{spell.name}</h5>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
 
@@ -375,7 +428,6 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {spell6.map(spell => (
                                     <div className={styles.spell} key={spell.index}>
                                         <h5>{spell.name}</h5>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
 
@@ -395,7 +447,6 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {spell7.map(spell => (
                                     <div className={styles.spell} key={spell.index}>
                                         <h5>{spell.name}</h5>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
 
@@ -415,7 +466,6 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {spell8.map(spell => (
                                     <div className={styles.spell} key={spell.index}>
                                         <h5>{spell.name}</h5>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
 
@@ -435,7 +485,6 @@ export default function Spells({ charData, spells }: CharDataProps) {
                                 {spell9.map(spell => (
                                     <div className={styles.spell} key={spell.index}>
                                         <p>{spell.name}</p>
-                                        <p>{spell.casting_time}</p>
                                     </div>
                                 ))}
 

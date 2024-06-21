@@ -9,20 +9,11 @@ import Link from "next/link";
 import { canSSRGuest } from "@/utils/canSSRGuest";
 import { parseCookies } from "nookies";
 
-
-
 export default function Home() {
-
     const { signIn } = useContext(AuthContext)
-
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(Boolean);
-
-    // useEffect(() => {
-    //     const cookies = parseCookies();
-    //     console.log('Cookies: ', cookies)
-    // })
 
     async function handleLogin(event: FormEvent) {
         event.preventDefault();
@@ -40,12 +31,12 @@ export default function Home() {
         await signIn(data)
         setLoading(false);
     }
+
     return (
         <>
             <Head>
                 <title>Login - D&D</title>
             </Head>
-
             <div className={styles.container}>
                 <div className={styles.containerCenter}>
                     <h1>Login</h1>

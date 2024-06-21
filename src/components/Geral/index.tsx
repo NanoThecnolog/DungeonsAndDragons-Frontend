@@ -3,14 +3,14 @@ import { canSSRAuth } from "@/utils/canSSRAuth";
 import CheckBox from "@/components/ui/CheckBox";
 import { TbSettings } from "react-icons/tb";
 import DiceRoller from "../Dados/Rolagem";
-
 import styles from "./styles.module.scss"
 import { Button } from "../ui/Button";
 import { toast } from "react-toastify";
-
 import { setupAPIClient } from "@/services/api";
-
-
+import { ClassDataProps } from "@/pages/char";
+import { RaceDataProps } from "@/pages/char";
+import CardRace from "../CardRace";
+import CardClass from "../CardClass";
 
 type DataProps = {
     id: string;
@@ -56,7 +56,6 @@ type CharProps = {
     char: DataProps;
     charClass: ClassProps[];
 }
-
 type ResultsSkillsProps = {
     index: string;
     name: string;
@@ -66,65 +65,85 @@ type SkillsProps = {
     count: number;
     results: ResultsSkillsProps[];
 }
-
 interface CharDataProps {
     charData: CharProps;
     skills: SkillsProps;
+    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+    classData: ClassDataProps[];
+    raceData: RaceDataProps;
+}
+interface TraitsProps {
+    index: string;
+    name: string;
+    url: string;
 }
 
-export default function Geral({ charData, skills }: CharDataProps) {
+export function translate(name: string) {
+    const translation: { [key: string]: string } = {
+        'STR': 'Força',
+        'DEX': 'Destreza',
+        'CON': 'Constituição',
+        'INT': 'Inteligência',
+        'WIS': 'Sabedoria',
+        'CHA': 'Carisma',
+        'Saving Throw': 'Testes de resistência'
+    }
+    let translated = name;
+    for (const [key, value] of Object.entries(translation)) {
+        const regex = new RegExp(key, 'g');
+        translated = translated.replace(regex, value);
+    }
+    return translated;
+}
+
+export default function Geral({ charData, skills, setUpdate, classData, raceData }: CharDataProps) {
     const [id, setId] = useState(null);
-    const [update, setUpdate] = useState(false)
-    const [level, setLevel] = useState<number>(1)
+    const [modalVisible, setModalVisible] = useState(false)
     const [experience, setExperience] = useState<number>(0)
     const [proficiencyBonus, setProficiencyBonus] = useState<number>(0)
-    // console.log(skills);
     const { count, results } = skills;
     const [skillsList, setSkillsList] = useState([])
-    // console.log("skills no geral", skillsList);
-    const { char, charClass } = charData
-
+    const [char, setChar] = useState(charData.char)
+    const [charClass, setCharClass] = useState(charData.charClass)
+    console.log(classData);
+    const [name, setName] = useState(char.name);
+    const [title, setTitle] = useState(char.title);
     const [modifyStr, setModifyStr] = useState("");
     const [modifyDex, setModifyDex] = useState("");
     const [modifyCon, setModifyCon] = useState("");
     const [modifyInt, setModifyInt] = useState("");
     const [modifyWis, setModifyWis] = useState("");
     const [modifyCha, setModifyCha] = useState("");
+    const [ca, setCa] = useState(10);
+    const [baseArmorClass, setBaseArmorClass] = useState(0);
+    const [heavySet, setHeavySet] = useState(false);
+    const [mediumSet, setMediumSet] = useState(false);
+    const [lightSet, setLightSet] = useState(false);
+    const [shieldSet, setShieldSet] = useState(false);
+    //no inventário eu verifico qual tipo de armadura ta equipada, ou se n tem armadura equipada, o mesmo pro escudo.
+    //aqui, ao clicar em modificar o CA, abre a opção de adicionar modificadores mágicos, como itens, feitiços, habilidades de classe, etc....
+    //na edição do CA, colocar os valores que estão sendo somados, ca base, o modificador, tudo q estiver compondo o CA do personagem.
     const [isExperienceExceeded, setIsExperienceExceeded] = useState(false);
-
-
     const [notes, setNotes] = useState("");
 
+    const [level, setLevel] = useState<number>(1)
     const experienceTable: { [level: number]: number } = {
-        1: 0,
-        2: 300,
-        3: 900,
-        4: 2700,
-        5: 6500,
-        6: 14000,
-        7: 23000,
-        8: 34000,
-        9: 48000,
-        10: 64000,
-        11: 85000,
-        12: 100000,
-        13: 120000,
-        14: 140000,
-        15: 165000,
-        16: 195000,
-        17: 225000,
-        18: 265000,
-        19: 305000,
-        20: 355000,
+        1: 0, 2: 300, 3: 900, 4: 2700, 5: 6500, 6: 14000, 7: 23000, 8: 34000, 9: 48000, 10: 64000, 11: 85000, 12: 100000, 13: 120000, 14: 140000, 15: 165000, 16: 195000, 17: 225000, 18: 265000, 19: 305000, 20: 355000
     };
-    const experienceLimit = experienceTable[level];
-
+    const experienceLimit = (level: number, experienceTable: { [level: number]: number }): number => {
+        if (level < 20) {
+            return experienceTable[level + 1];
+        } else if (level === 20) {
+            return experienceTable[level];
+        }
+    }
+    useEffect(() => {
+        setTitle(char.title)
+    }, [char, raceData])
 
     useEffect(() => {
         setSkillsList(results)
-
-
-        function modificadores() {
+        function modifyCalculate() {
             if (!char) {
                 return;
             }
@@ -157,35 +176,64 @@ export default function Geral({ charData, skills }: CharDataProps) {
             const baseCha = Math.floor(cha / 2) - 5;
             const modifyCha = baseCha >= 0 ? `+${baseCha}` : `${baseCha}`
             setModifyCha(modifyCha);
-
-
         }
-        modificadores();
+        modifyCalculate();
         calculateLevel();
         calculateProficiency(level)
 
-    }, [char, update])
+    }, [char, level])
+
     useEffect(() => {
-        if (Number(char.experience) >= experienceLimit) {
+        if (Number(char.experience) >= Number(experienceLimit)) {
             setIsExperienceExceeded(true);
         } else {
             setIsExperienceExceeded(false);
         }
     }, [char.experience, experienceLimit]);
+
+    useEffect(() => {
+        function armorClassCalculate() {
+            if (lightSet) {
+                if (Number(modifyDex) > 0) {
+                    setCa(Number(modifyDex) + baseArmorClass)
+                } else {
+                    setCa(baseArmorClass)
+                }
+
+            } else if (mediumSet) {
+                if (Number(modifyDex) >= 2) {
+                    setCa(2 + baseArmorClass)
+                } else {
+                    if (Number(modifyDex) <= 0) {
+                        setCa(baseArmorClass)
+                    } else {
+                        setCa(Number(modifyDex) + baseArmorClass)
+                    }
+                }
+            } else if (heavySet) {
+                setCa(baseArmorClass)
+            } else {
+                if (Number(modifyDex) <= 0) {
+                    setCa(10 + 0)
+                } else {
+                    setCa(10 + Number(modifyDex))
+                }
+            }
+        }
+        armorClassCalculate();
+    }, [lightSet, mediumSet, heavySet, modifyDex, baseArmorClass])
+
+
     function calculateLevel() {
         if (charClass.length > 1) {
-
             const somaLevel = Number(charClass[0].level) + Number(charClass[1].level)
             setLevel(somaLevel)
-
-
         } else {
             const level = Number(charClass[0].level)
             setLevel(level)
         }
-
-
     }
+
     function calculateProficiency(level: number) {
         if (level >= 1 && level <= 4) {
             const bonus = 2
@@ -208,10 +256,9 @@ export default function Geral({ charData, skills }: CharDataProps) {
             setProficiencyBonus(bonus)
         };
     }
-    // console.log(proficiencyBonus)
+
     async function handleNotes() {
         console.log("notes")
-
         try {
             if (!notes) {
                 toast.warning("Nada foi escrito.")
@@ -232,194 +279,220 @@ export default function Geral({ charData, skills }: CharDataProps) {
             toast.error("Erro ao salvar anotações...")
         }
     }
+    function handleImage() {
+        setModalVisible(true)
+        console.log("imagem")
+    }
+    function handleNivel() {
+        console.log('nível para mudar')
+    }
 
+    function handleCA() {
+        console.log("CA")
+        //modal deve conter opção para modificadores mágicos, poder adicionar esses modificadores.
+        //mostrar também a composição atual do CA do personagem.
+    }
+    function handleCloseModal() {
+        setModalVisible(false);
+        setUpdate(true)
+    }
 
     if (!charData) {
         return <div>Carregando...</div>
     }
-
-    // console.log("level", level)
-
     return (
-        <>
+        char ? (
             <div className={styles.container}>
                 <div className={styles.dataContainer}>
-                    {char ? (
-                        <>
+                    <div className={styles.row}>
+                        <div className={styles.image} style={{ backgroundImage: `url(http://localhost:3333/files/${char.image})` }} onClick={handleImage}>
+                            {!char.image && ('Sem Imagem')}
+                        </div>
+                        <div className={styles.area1}>
                             <div className={styles.row}>
-                                <div className={styles.image} style={{ backgroundImage: `url(http://localhost:3333/files/${char.image})` }}>
-                                    <div className={styles.editar}><TbSettings size={25} /></div>
-                                    {!char.image && ('Sem Imagem')}
-                                </div>
-                                <div className={styles.area1}>
-                                    <div className={styles.row}>
-                                        <div className={styles.principal}>
-                                            <div className={styles.editar}><TbSettings size={25} /></div>
-                                            <h4>{char.name}</h4>
-                                            <p>{char.title ? char.title : (<>Título não definido</>)}</p>
-                                            <div className={styles.nivel}>
-                                                <p> Nível {level}</p>
+                                <div className={styles.principal}>
+                                    <h4>{name}</h4>
+                                    {title ? (
+                                        <p className={styles.titulo}>"{title}"</p>
+                                    ) : (
+                                        <p className={styles.titulo}>Sem título</p>
+                                    )}
+                                    <div className={styles.nivel}>
+                                        <p> Nível {level}</p>
 
-                                                {isExperienceExceeded && (<div className={styles.subirNivel}>+ subir nivel</div>)}
-                                            </div>
-
-                                            <p>Exp: {char.experience} / {experienceLimit}</p>
-
-                                        </div>
-                                        <div className={styles.class}>
-                                            <div className={styles.editar}><TbSettings size={25} /></div>
-                                            <p>{charData.charClass[0].name} - {charData.charClass[0].level}</p>
-                                            {charData.charClass[1] && (
-                                                <p>{charData.charClass[1].name} - {charData.charClass[1].level}</p>
-                                            )}
-                                            <p>{char.race}</p>
-
-
-                                        </div>
-                                        <div className={styles.antecedentes}>
-                                            <div className={styles.editar}><TbSettings size={25} /></div>
-                                            <p>Antecedêntes</p>
-                                            <p><strong>{char.background}</strong></p>
-                                        </div>
-                                        <div className={styles.ca}>
-                                            <div className={styles.editar}><TbSettings size={25} /></div>
-                                            <p>CA</p>
-                                            <p>{char.armor_class}</p>
-                                        </div>
+                                        {isExperienceExceeded && (<div className={styles.subirNivel} onClick={handleNivel}>+ subir nivel</div>)}
                                     </div>
-                                    <div className={styles.row}>
-                                        <div className={styles.vida}>
-                                            <div className={styles.editar}><TbSettings size={25} /></div>
-                                            <h3>Pontos de vida</h3>
-                                            <p>{char.current_hp} / {char.max_hp}</p>
-                                            <h4>Vida temporária</h4>
-                                            <p>{char.temporary_hp}</p>
 
-                                        </div>
-                                        <div className={styles.proficiency}>
-                                            <div className={styles.editar}><TbSettings size={25} /></div>
-                                            <h3>Bônus de Proficiência</h3>
-                                            <div className={styles.bonus}>
-                                                <p>+{proficiencyBonus}</p>
-                                            </div>
-                                        </div>
-                                        {/**Na área de resistencia a morte, a ideia é utilizar checkboxes para guardar o uso dos testes de resistencia a morte.
+                                    <p>Exp: {char.experience} / {experienceLimit(level, experienceTable)}</p>
+
+                                </div>
+                                <div className={styles.class}>
+                                    <p>{charData.charClass[0].name} - {charData.charClass[0].level}</p>
+                                    {charData.charClass[1] && (
+                                        <p>{charData.charClass[1].name} - {charData.charClass[1].level}</p>
+                                    )}
+                                    <p>{char.race}</p>
+
+
+                                </div>
+                                <div className={styles.antecedentes}>
+                                    <p>Antecedente</p>
+                                    <p><strong>{char.background}</strong></p>
+                                </div>
+                                <div className={styles.ca}>
+                                    <div className={styles.editar} onClick={handleCA}><TbSettings size={25} /></div>
+                                    <p>CA</p>
+                                    <p>{ca}</p>
+                                </div>
+                            </div>
+                            <div className={styles.row}>
+                                <div className={styles.vida}>
+                                    <h3>Pontos de vida</h3>
+                                    <p>{char.current_hp} / {char.max_hp}</p>
+                                    <h4>Vida temporária</h4>
+                                    <p>{char.temporary_hp}</p>
+
+                                </div>
+                                <div className={styles.proficiency}>
+                                    <h3>Bônus de Proficiência</h3>
+                                    <div className={styles.bonus}>
+                                        <p>+{proficiencyBonus}</p>
+                                    </div>
+                                </div>
+                                {/**Na área de resistencia a morte, a ideia é utilizar checkboxes para guardar o uso dos testes de resistencia a morte.
                                          * Posso utilizar o banco de dados pra isso ou o localstorage do navegador do usuário... ainda não decidi.
                                          */}
-                                        <div className={styles.morte}>
-                                            <h3>Resistencia a morte</h3>
-                                            {char.death_saving_throws}
-                                            <div>
-                                                <div className={styles.checkBox}>
-                                                    <CheckBox>
-                                                        <p className={styles.checkText}>Primeira morte</p>
-                                                    </CheckBox>
-                                                </div>
-                                                <div className={styles.checkBox}>
-                                                    <CheckBox>
-                                                        <p className={styles.checkText}>Segunda morte</p>
-                                                    </CheckBox>
-                                                </div>
-                                                <div className={styles.checkBox}>
-                                                    <CheckBox>
-                                                        <p className={styles.checkText}>Terceira morte</p>
-                                                    </CheckBox>
-                                                </div>
-                                            </div>
+                                <div className={styles.morte}>
+                                    <h3>Resistencia a morte</h3>
+                                    {char.death_saving_throws}
+                                    <div>
+                                        <div className={styles.checkBox}>
+                                            <CheckBox>
+                                                <p className={styles.checkText}>Primeira morte</p>
+                                            </CheckBox>
                                         </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div className={styles.row}>
-                                <div className={styles.linhadebaixo}>
-                                    <div className={styles.statusContainer}>
-                                        <div className={styles.editar}><TbSettings size={25} /></div>
-                                        <div className={styles.status}>
-                                            <h4 className={styles.statusText}>Força</h4>
-                                            <p className={styles.statusValue}>{char.str}</p>
-                                            <p className={styles.statusModify}>({modifyStr})</p>
+                                        <div className={styles.checkBox}>
+                                            <CheckBox>
+                                                <p className={styles.checkText}>Segunda morte</p>
+                                            </CheckBox>
                                         </div>
-                                        <div className={styles.status}>
-                                            <h4 className={styles.statusText}>Dextreza</h4>
-                                            <p className={styles.statusValue}>{char.dex}</p>
-                                            <p className={styles.statusModify}>({modifyDex})</p>
-                                        </div>
-                                        <div className={styles.status}>
-                                            <h4 className={styles.statusText}>Constituição</h4>
-                                            <p className={styles.statusValue}>{char.con}</p>
-                                            <p className={styles.statusModify}>({modifyCon})</p>
-                                        </div>
-                                        <div className={styles.status}>
-                                            <h4 className={styles.statusText}>Inteligência</h4>
-                                            <p className={styles.statusValue}>{char.int}</p>
-                                            <p className={styles.statusModify}>({modifyInt})</p>
-                                        </div>
-                                        <div className={styles.status}>
-                                            <h4 className={styles.statusText}>Sabedoria</h4>
-                                            <p className={styles.statusValue}>{char.wis}</p>
-                                            <p className={styles.statusModify}>({modifyWis})</p>
-                                        </div>
-                                        <div className={styles.status}>
-                                            <h4 className={styles.statusText}>Carisma</h4>
-                                            <p className={styles.statusValue}>{char.cha}</p>
-                                            <p className={styles.statusModify}>({modifyCha})</p>
-                                        </div>
-
-                                    </div>
-
-                                    {/*pensar em registrar as perícias do personagem junto com seus valores e mostrá-las aqui. Essa lista sendo renderizada agora pode passar para a edição de personagem.*/}
-                                    {/*Relizar o Prisma migrate para atualizar o banco de dados adicionando o campo skills para armazenar os dados das perícias do personagem*/}
-                                    <div className={styles.pericias}>
-                                        <div className={styles.editar}><TbSettings size={25} /></div>
-                                        Area 3 - Pericias
-                                        {skillsList.map((item, index) => {
-                                            return (
-                                                <p key={index}>{item.name}</p>
-                                            )
-                                        })}
-                                    </div>
-                                    <div className={styles.outros}>
-                                        <div className={styles.row}>
-                                            <div className={styles.dados}>
-                                                <DiceRoller />
-                                            </div>
-                                        </div>
-                                        <div className={styles.row}>
-                                            <div className={styles.anotacoes}>
-                                                <textarea
-                                                    title="anotações"
-                                                    placeholder="Anotações da sessão"
-                                                    className={styles.textAnotacoes}
-                                                    value={notes}
-                                                    onChange={(e) => setNotes(e.target.value)}
-                                                />
-                                                <div>
-                                                    <Button>Ver notas</Button>
-                                                    <Button onClick={handleNotes}>Salvar</Button>
-                                                </div>
-                                                {//adicionar um botão para abrir um modal apresentando uma tabela com todas as notas salvas do personagem.
-                                                    //Na tabela devo apresentar o texto salvo, data de criação, opção para editar ou excluir.
-                                                }
-                                            </div>
-
+                                        <div className={styles.checkBox}>
+                                            <CheckBox>
+                                                <p className={styles.checkText}>Terceira morte</p>
+                                            </CheckBox>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </>
-                    ) : (
-                        <div className={styles.loading}>
-                            <h2>Carregando....</h2>
+
                         </div>
-                    )}
+
+                    </div>
+
+                    <div className={styles.row}>
+                        <div className={styles.linhadebaixo}>
+                            <div className={styles.statusContainer}>
+                                <div className={styles.status}>
+                                    <h4 className={styles.statusText}>Força</h4>
+                                    <p className={styles.statusValue}>{char.str}</p>
+                                    <p className={styles.statusModify}>({modifyStr})</p>
+                                </div>
+                                <div className={styles.status}>
+                                    <h4 className={styles.statusText}>Dextreza</h4>
+                                    <p className={styles.statusValue}>{char.dex}</p>
+                                    <p className={styles.statusModify}>({modifyDex})</p>
+                                </div>
+                                <div className={styles.status}>
+                                    <h4 className={styles.statusText}>Constituição</h4>
+                                    <p className={styles.statusValue}>{char.con}</p>
+                                    <p className={styles.statusModify}>({modifyCon})</p>
+                                </div>
+                                <div className={styles.status}>
+                                    <h4 className={styles.statusText}>Inteligência</h4>
+                                    <p className={styles.statusValue}>{char.int}</p>
+                                    <p className={styles.statusModify}>({modifyInt})</p>
+                                </div>
+                                <div className={styles.status}>
+                                    <h4 className={styles.statusText}>Sabedoria</h4>
+                                    <p className={styles.statusValue}>{char.wis}</p>
+                                    <p className={styles.statusModify}>({modifyWis})</p>
+                                </div>
+                                <div className={styles.status}>
+                                    <h4 className={styles.statusText}>Carisma</h4>
+                                    <p className={styles.statusValue}>{char.cha}</p>
+                                    <p className={styles.statusModify}>({modifyCha})</p>
+                                </div>
+
+                            </div>
+
+                            {/*pensar em registrar as perícias do personagem junto com seus valores e mostrá-las aqui. Essa lista sendo renderizada agora pode passar para a edição de personagem.*/}
+                            {/*Relizar o Prisma migrate para atualizar o banco de dados adicionando o campo skills para armazenar os dados das perícias do personagem*/}
+                            <div className={styles.pericias}>
+                                {skillsList.map((item, index) => {
+                                    return (
+                                        <p key={index}>{item.name}</p>
+                                    )
+                                })}
+                            </div>
+                            <div className={styles.outros}>
+                                <div className={styles.row}>
+                                    <div className={styles.dados}>
+                                        <DiceRoller />
+                                    </div>
+                                </div>
+                                <div className={styles.row}>
+                                    <div className={styles.anotacoes}>
+                                        <textarea
+                                            title="anotações"
+                                            placeholder="Anotações da sessão"
+                                            className={styles.textAnotacoes}
+                                            value={notes}
+                                            onChange={(e) => setNotes(e.target.value)}
+                                        />
+                                        <div>
+                                            <Button>Ver notas</Button>
+                                            <Button onClick={handleNotes}>Salvar</Button>
+                                        </div>
+                                        {//adicionar um botão para abrir um modal apresentando uma tabela com todas as notas salvas do personagem.
+                                            //Na tabela devo apresentar o texto salvo, data de criação, opção para editar ou excluir.
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className={styles.row}>
+                        <div className={styles.race_classes_data}>
+                            <CardRace
+                                dataRace={raceData}
+                            />
+                            <CardClass
+                                dataClass={classData}
+                            />
+                        </div>
+
+                    </div>
+
+
                 </div>
+                {modalVisible && (
+                    <div className={styles.modalImage} onClick={handleCloseModal}>
+                        <div className={styles.imageContainer} style={{ background: `url(http://localhost:3333/files/${char.image}) no-repeat`, backgroundSize: 'contain', backgroundPosition: 'center' }}>
+                        </div>
+                    </div>
+                )}
             </div>
-        </>
+
+        ) : (
+            <div className={styles.loading}>
+                <h2>Carregando....</h2>
+            </div>
+        )
     )
 }
+
 export const getServerSideProps = canSSRAuth(async (ctx) => {
 
     return {

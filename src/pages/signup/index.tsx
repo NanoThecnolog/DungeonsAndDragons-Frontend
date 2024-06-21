@@ -1,50 +1,37 @@
 import { FormEvent, useState, useContext } from "react";
-
 import Head from "next/head"
 import styles from "../../../styles/home.module.scss";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/Button";
-
 import { AuthContext } from "@/contexts/AuthContext";
-
 import { toast } from "react-toastify";
-
 import Link from "next/link";
 
-
-
 export default function SignUp() {
-
     const { signUp } = useContext(AuthContext);
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
+    const [char_limit, setCharLimit] = useState(5)
     const [loading, setLoading] = useState(false)
 
     async function handleSignUp(event: FormEvent) {
         event.preventDefault();
-
         if (name === '' || email === '' || password === '') {
             //colocar um toastify
             toast.warning("Preencha tudo para criar uma conta")
             return;
         }
-
         setLoading(true);
-
         let data = {
             name,
             email,
-            password
+            password,
+            char_limit
         }
-
         await signUp(data)
-
         setLoading(false);
     }
-
 
     return (
         <>
@@ -68,7 +55,6 @@ export default function SignUp() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-
                             <Input
                                 placeholder="Digite sua senha"
                                 type="password"
@@ -85,9 +71,7 @@ export default function SignUp() {
                             <a className={styles.text}>Já possui uma conta? Faça Login!</a>
                         </Link>
                     </div>
-
                 </div>
-
             </div>
         </>
     )

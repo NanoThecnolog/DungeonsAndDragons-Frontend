@@ -1,6 +1,6 @@
 .container {
     width: 100%;
-    height: calc(100vh - 5rem);
+    height: calc(100% - 5rem);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -9,7 +9,23 @@
     padding: 0.5rem;
 
 
+    .modalImage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #0000008c;
 
+
+        .imageContainer {
+            width: 80%;
+            height: 80%;
+        }
+    }
 }
 
 .loading {
@@ -22,20 +38,21 @@
 
 .dataContainer {
     width: 80%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     border: 4px solid var(--color-text);
     box-shadow: 5px 2px 10px var(--preto);
     border-radius: 0.5rem;
     padding: 1rem;
+    position: relative;
 
 
     .row {
         display: flex;
+        width: 100%;
         justify-content: space-between;
-
     }
-
 
     .image {
         width: 35%;
@@ -49,6 +66,7 @@
         box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
         transition: all 0.5s;
         position: relative;
+        cursor: pointer;
 
         &:hover {
             transform: scale(1.1);
@@ -61,9 +79,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-
     }
-
 }
 
 .principal {
@@ -78,6 +94,11 @@
 
     &:hover {
         transform: scale(1.2);
+    }
+
+    .titulo {
+        font-size: 0.8rem;
+        font-style: italic;
     }
 
     .nivel {
@@ -105,13 +126,10 @@
     margin: 0 0 0 1rem;
     cursor: pointer;
 
-
     &:hover {
         transform: scale(1.2);
     }
 }
-
-
 
 .class {
     margin: 0.3rem 0.5rem;
@@ -144,14 +162,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     transition: all 0.5s;
     position: relative;
 
     &:hover {
         transform: scale(1.2)
     }
-
 }
 
 .ca {
@@ -174,7 +191,6 @@
     p+p {
         margin: 0.5rem;
     }
-
 }
 
 .vida {
@@ -210,7 +226,6 @@
     position: relative;
     transition: all 0.5s;
 
-
     .bonus {
         border: 3px solid var(--color-text);
         border-radius: 50%;
@@ -223,8 +238,6 @@
         &:hover {
             transform: scale(1.1);
         }
-
-
     }
 
     &:hover {
@@ -279,7 +292,6 @@
     width: 25%;
     position: relative;
 
-
     .status {
         display: flex;
         flex-direction: column;
@@ -314,7 +326,6 @@
             transform: scale(1.4);
         }
     }
-
 }
 
 .pericias {
@@ -365,7 +376,6 @@
         align-items: flex-end;
         margin: 0.5rem;
 
-
         .textAnotacoes {
             border-radius: 0.5rem;
             background-color: var(--backgroundTextArea);
@@ -390,4 +400,13 @@
     &:hover {
         transform: scale(1.2);
     }
+}
+
+.race_classes_data {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin-top: 2rem;
 }

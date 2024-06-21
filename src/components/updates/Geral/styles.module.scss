@@ -1,0 +1,87 @@
+.container {
+    width: 100%;
+    height: calc(100vh - 5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+
+
+
+}
+
+.updateContainer {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    border: 4px solid var(--color-text);
+    box-shadow: 5px 2px 10px var(--preto);
+    border-radius: 0.5rem;
+    padding: 1rem;
+
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+
+        div+div {
+            margin: 0.4rem;
+        }
+
+        .submit {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+
+            button {
+                width: 10%;
+            }
+        }
+
+    }
+
+    input {
+        background-color: white;
+        border: 0;
+        border-radius: 0.4rem;
+        margin: 0.2rem;
+        padding: 0.2rem;
+        color: var(--preto);
+    }
+
+    input::placeholder {
+        color: var(--preto)
+    }
+
+    select {
+        background-color: transparent;
+        border: 0;
+    }
+
+    .upAtributos {
+        display: flex;
+        flex-direction: column;
+
+
+
+        .upStatus {
+            display: flex;
+            margin-top: 0.5rem;
+            align-items: center;
+
+            .status {
+                width: 10%;
+            }
+
+        }
+    }
+
+    button {
+        margin: 10px;
+    }
+
+
+}

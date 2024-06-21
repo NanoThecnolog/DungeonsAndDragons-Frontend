@@ -6,17 +6,17 @@ import { canSSRAuth } from "@/utils/canSSRAuth";
 import { setupAPIClient } from "@/services/api";
 import { setupAPIClientExternal } from "@/services/apiD&D/apiExternal";
 import { Button } from "@/components/ui/Button";
-
 import Geral from "@/components/Geral";
 import Sobre from "@/components/Sobre";
 import Bag from "@/components/Inventario";
 import Spells from "@/components/Magias";
-
+import UpdateGeral from "@/components/updates/Geral";
 import styles from "./styles.module.scss"
-
+import Modal from "react-modal";
 
 type ClassProps = {
     id: string;
+    index: string;
     name: string;
     level: string;
 }
@@ -41,6 +41,7 @@ interface CharProps {
     experience: string;
     armor_class: string;
     ideals: string;
+    spells: string[];
     bonds: string[];
     flaws: string[];
     features: string[];
@@ -55,13 +56,11 @@ interface CharProps {
     cantrips: string[];
     char_class: ClassProps[];
 }
-
 type ResultsSkillsProps = {
     index: string;
     name: string;
     url: string;
 }
-
 interface SkillProps {
     count: number
     results: ResultsSkillsProps[];
@@ -75,26 +74,193 @@ type SpellsProps = {
 type SpellsDataProps = {
     count: number;
     results: SpellsProps[];
-
 }
 interface SkillComponentProps {
     skills: SkillProps | null
     spells: SpellsDataProps
 }
+
+
+export interface ClassDataProps {
+    name: string;
+    data: {
+        class_levels: "/api/classes/paladin/levels"
+        hit_die: 10
+        index: "paladin"
+        multi_classing: {
+            prerequisites: [
+                {
+                    ability_score: {
+                        index: string;
+                        name: string;
+                        url: string;
+                    }
+                    minimum_score: number
+                }
+            ]
+        }
+        proficiencies: [
+            {
+                index: string;
+                name: string;
+                url: string;
+            }
+        ]
+        proficiency_choices: [
+            {
+                choose: number;
+                desc: string;
+            }
+        ]
+        saving_throws: [
+            {
+                index: string;
+                name: string;
+                url: string;
+            }
+        ]
+        spellcasting: {
+            info: [{
+                name: string;
+                desc: string[];
+            }];
+            level: number;
+            spellcasting_ability: {
+                index: string;
+                name: string;
+                url: string;
+            }
+        }
+        spells: string;
+        starting_equipment: [
+            {
+                equipment: {
+                    index: string;
+                    name: string;
+                    url: string;
+                }
+                quantity: number;
+            }
+        ]
+        starting_equipment_options: [
+            {
+                choose: number;
+                desc: string;
+                from: {
+                    option_set_type: string;
+                    options: [
+                        {
+                            items: [
+                                {
+                                    choice: number;
+                                    desc: string;
+                                    from: {
+                                        equipment_category: {
+                                            name: string;
+                                            index: string;
+                                            url: string;
+                                        }
+                                        option_set_type: string;
+                                    }
+                                    type: string;
+                                }
+                            ]
+                            option_type: string;
+                        }
+                    ]
+                }
+                type: string;
+            }
+        ]
+        subclasses: [
+            {
+                index: string;
+                name: string;
+                url: string;
+            }
+        ]
+        url: string;
+    }
+}
+
+export interface RaceDataProps {
+    ability_bonuses: [
+        {
+            ability_score: {
+                index: string;
+                name: string;
+                url: string;
+            }
+            bonus: number;
+        }
+    ]
+    age: string;
+    alignment: string;
+    index: string;
+    language_desc: string;
+    languages: [
+        {
+            index: string;
+            name: string;
+            url: string;
+        }
+    ]
+    name: string;
+    size: string;
+    size_description: string;
+    speed: number;
+    starting_proficiencies: [
+        {
+            index: string;
+            name: string;
+            url: string;
+        }
+    ]
+    starting_proficiency_options: {
+        choose: number;
+        desc: string;
+        from: {
+            option_set_type: string;
+            options: [
+                {
+                    item: {
+                        index: string;
+                        name: string;
+                        url: string;
+                    }
+                    option_type: string;
+                }
+            ]
+        }
+        type: string;
+    }
+    subraces: [
+        {
+            index: string;
+            name: string;
+            url: string;
+        }
+    ]
+    traits: [
+        {
+            index: string;
+            name: string;
+            url: string;
+        }
+    ]
+    url: string;
+}
+
 export default function Char({ skills, spells }: SkillComponentProps) {
-    const [currentComponent, setCurrentComponent] = useState('A');
-    const [title, setTitle] = useState('');
-
-    const router = useRouter();
-    const [id, setId] = useState(null);
+    const [currentComponent, setCurrentComponent] = useState('A')
+    const [title, setTitle] = useState('')
+    const router = useRouter()
+    const [id, setId] = useState(null)
     const [charData, setCharData] = useState<{ char: CharProps, charClass: ClassProps[] } | null>(null)
-    const [update, setUpdate] = useState(false)
+    const [classData, setClassData] = useState<ClassDataProps[] | null>([])
+    const [raceData, setRaceData] = useState<RaceDataProps | null>()
 
-    // const [usuarioReq, setUsuarioReq] = useState(usuario);
-    // console.log(usuarioReq)
-
-
-    // const [skillsList, setSkillsList] = useState<SkillProps>(null)
+    const [update, setUpdate] = useState<boolean>()
 
     useEffect(() => {
         if (currentComponent === 'A') {
@@ -108,7 +274,6 @@ export default function Char({ skills, spells }: SkillComponentProps) {
         }
     }, [currentComponent]);
 
-
     useEffect(() => {
         if (router.isReady) {
             const { id } = router.query;
@@ -121,7 +286,6 @@ export default function Char({ skills, spells }: SkillComponentProps) {
     useEffect(() => {
         async function fecthCharData() {
             if (!id) return;
-
             const apiClient = setupAPIClient();
             try {
                 const response = await apiClient.get('/char/detail', {
@@ -130,48 +294,88 @@ export default function Char({ skills, spells }: SkillComponentProps) {
                     }
                 })
                 setCharData(response.data)
-                // console.log(response.data)
-
+                console.log(response.data)
             } catch (err) {
                 console.log("Erro ao buscar dados do personagem", err);
             }
         }
         fecthCharData();
-
+        console.log(update)
+        setUpdate(false);
+        console.log(update)
+        renderComponent()
     }, [id, update]);
 
-    // console.log("teste", skills)
+    useEffect(() => {
+        async function fecthClassData() {
+            const apiClientExternal = setupAPIClientExternal();
+            if (classData.length === 0) {
+                try {
+                    if (charData.charClass.length >= 1) {
+                        for (const item of charData.charClass) {
+                            const response = await apiClientExternal.get(`/api/classes/${item.index}`)
+                            const classObject = { name: item.name, data: response.data };
+                            setClassData(prevState => [...prevState, classObject])
+                        }
+                    }
+                    console.log("busca da raça concluída")
 
+                } catch (err) {
+                    console.log("Erro ao buscar dados da classe na api externa", err)
+                }
+            }
+        };
+        async function fecthRaceData() {
+            const apiClientExternal = setupAPIClientExternal();
+            if (!raceData) {
+                try {
+                    const response = await apiClientExternal.get(`/api/races/${charData.char.race}`)
+                    const raceData = response.data;
+                    setRaceData(raceData);
+                    console.log("busca da raça concluída")
 
+                } catch (err) {
+                    console.log("Erro ao buscar dados da raça na api externa", err)
+
+                }
+            }
+        }
+        fecthClassData();
+        fecthRaceData();
+    }, [charData]);
 
     if (!charData || !skills || !spells) {
         return <div className={styles.loading}>Carregando...</div>
     }
 
-
-
     function renderComponent() {
         if (currentComponent === 'A') {
+            console.log('a')
             return (
                 <>
                     <Geral
                         charData={charData}
                         skills={skills}
+                        setUpdate={setUpdate}
+                        classData={classData}
+                        raceData={raceData}
                     />
                 </>
             )
         } else if (currentComponent === 'B') {
-
+            console.log('b')
             return <Sobre charData={charData} />
         } else if (currentComponent === 'C') {
-
+            console.log('c')
             return <Bag />
         } else if (currentComponent === 'D') {
-
+            console.log('d')
             return <Spells charData={charData} spells={spells} />
+        } else if (currentComponent === 'E') {
+            return <UpdateGeral />
         }
     }
-
+    Modal.setAppElement('#__next');
     return (
         <>
             <Head>
@@ -182,14 +386,13 @@ export default function Char({ skills, spells }: SkillComponentProps) {
                 <div className={styles.menuContainer}>
                     <nav>
                         <Button onClick={() => setCurrentComponent('A')}>Geral</Button>
+                        <Button onClick={() => setCurrentComponent('B')}>Sobre</Button>
                         <Button onClick={() => setCurrentComponent('C')}>Inventario</Button>
                         <Button onClick={() => setCurrentComponent('D')}>Magias</Button>
-                        <Button onClick={() => setCurrentComponent('B')}>Sobre</Button>
-
+                        <Button onClick={() => setCurrentComponent('E')}>Editar Informações</Button>
                     </nav>
                 </div>
                 <>
-
                     {renderComponent()}
                 </>
             </div>
@@ -199,13 +402,10 @@ export default function Char({ skills, spells }: SkillComponentProps) {
 export const getServerSideProps = canSSRAuth(async (ctx) => {
     const apiClientExternal = setupAPIClientExternal();
     try {
-
         const responseSkills = await apiClientExternal.get("/api/skills")
         const skills = responseSkills.data
-
         const responseSpells = await apiClientExternal.get("/api/spells")
         const spells = responseSpells.data
-
         console.log("Buscando perícias e magias na api externa, do lado do servidor, em char.")
         return {
             props: {
@@ -219,12 +419,8 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
             props: {
                 skills: null,
                 spells: null
-
             }
         }
     }
-
-
-
-
 })
+

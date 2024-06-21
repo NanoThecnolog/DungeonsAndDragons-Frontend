@@ -86,6 +86,11 @@
     align-items: center;
     margin-right: 10%;
     position: relative;
+
+    .titulo {
+        font-style: italic;
+        font-size: 0.8rem;
+    }
 }
 
 @media (prefers-color-scheme: dark) {

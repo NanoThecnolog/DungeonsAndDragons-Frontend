@@ -30,7 +30,6 @@ export default function Card({ id, name, title, race, char_class, image, onDelet
 
     function handleOnClick(id: string) {
         setIsLoading(true);
-
         router.push(`/char?id=${id}`)
         // setIsLoading(false);
     }
@@ -66,7 +65,7 @@ export default function Card({ id, name, title, race, char_class, image, onDelet
                         <div>
                             <h3 className={styles.textName}>{name}</h3>
                             {title && (
-                                <p>{title}</p>
+                                <p className={styles.titulo}>"{title}"</p>
                             )}
 
                         </div>

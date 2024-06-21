@@ -46,7 +46,7 @@
         width: 20%;
         height: 300px;
         margin: 0.5rem;
-        padding: 0.5rem;
+        padding: 0.2rem;
         overflow: hidden;
         position: relative;
 
@@ -59,15 +59,17 @@
             h5 {
                 text-align: center;
                 font-size: 0.5rem;
+
             }
         }
 
         .spellContainer {
             margin-top: 1.5rem;
-            padding-right: 0.5rem;
+            padding: 0 0.5rem 0 0.3rem;
             overflow-y: scroll;
             text-wrap: nowrap;
             width: 100%;
+
 
 
             .spell {
@@ -81,6 +83,12 @@
                 height: 1.5rem;
                 overflow: hidden;
                 text-overflow: clip;
+                transition: all 0.5s;
+
+                &:hover {
+                    transform: scale(1.05);
+                    background-color: var(--vermelhoLaranja);
+                }
 
             }
 

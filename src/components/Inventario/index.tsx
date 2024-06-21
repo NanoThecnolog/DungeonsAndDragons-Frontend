@@ -4,6 +4,13 @@ import { FaCircleMinus } from "react-icons/fa6";
 
 import Editar from '../ui/Config';
 
+/**Criar uma função para criar itens com nome, descrição, valor monetario, peso em kg, quantidade, tipo de equipamento (arma, armadura, escudo, equipamento aleatório), tipo de equipamento:
+ * se for arma => tipo de dano da arma (lista padrão ou outro, permitindo colocar o tipo customizado), propriedade da arma, atributo da arma, dado de dano, bonus de dano 
+ * se for armadura => classe de armadura base, atributo da armadura pra escolher e o minimo
+ * se for escudo => classe de armadura base, atributo do escudo pra escolher
+ * se for item => tipo do equipamento, normal ou mágico
+*/
+
 export default function Bag() {
     return (
         <>

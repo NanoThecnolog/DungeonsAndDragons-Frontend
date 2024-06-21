@@ -1,0 +1,124 @@
+.info {
+    width: 100%;
+    border: 3px solid var(--color-text);
+    border-radius: 0.4rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .racaContainer {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .raca {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 0.5rem;
+
+            .subraca {
+
+                p {
+                    font-size: 0.8rem;
+                    font-style: italic;
+                    padding: 5px 0;
+                }
+            }
+        }
+
+        .traits {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+            width: 100%;
+
+            .raceTraits {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                div+div {
+                    margin: 0.5rem;
+                }
+
+                .traitsContainer {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+
+                    span {
+                        font-size: 0.9rem;
+                        font-style: italic;
+                        text-align: justify;
+                    }
+                }
+
+                .habilidadesContainer {
+                    margin: 5px;
+
+                    p {
+                        font-size: 0.8rem;
+                    }
+                }
+
+                .ageContainer {
+
+                    p {
+                        font-size: 0.8rem;
+                    }
+                }
+
+                .tendenciaContainer {
+                    margin: 5px;
+
+                    span {
+                        font-style: italic;
+                        font-size: 0.8rem;
+                        text-align: center;
+                    }
+                }
+
+                .proficiencyContainer {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+
+                    .proficiencyItem {
+                        margin: 0.1rem;
+                    }
+
+                    .proficiencyOptions {
+                        font-size: 0.8rem;
+                        font-style: italic;
+                    }
+                }
+
+                .languagesTraits {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    width: 50%;
+                    margin: 0 0.5rem;
+
+                    p {
+                        font-size: 0.8rem;
+                        font-style: italic;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
