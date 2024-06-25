@@ -23,6 +23,7 @@ import Router, { useRouter } from "next/router";
 //possibilidade de mestres abrirem sessões. Adicionar jogadores a sessão.
 //Sessões podem ter uma espécie de mapa permitindo que mestres posicionem inimigos pelo cenário.
 //Permitir que jogadores se posicionem no mapa
+//criar algo q gere prestígio de acordo com o tempo de uso?
 export type UserProps = {
     id: string;
     name: string;

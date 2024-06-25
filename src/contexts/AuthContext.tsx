@@ -62,7 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<UserProps>()
     const isAuthenticated = !!user;
 
-    const [isPlaying, setIsPlaying] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(0.5);
     const [currentTrack, setCurrentTrack] = useState('./Diggy-Diggy-Hole.mp3')
 

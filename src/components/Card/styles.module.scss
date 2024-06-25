@@ -91,6 +91,28 @@
         font-style: italic;
         font-size: 0.8rem;
     }
+
+    .nameContainer {
+        display: flex;
+        flex-direction: column;
+        width: 85%;
+    }
+
+    .raceContainer {
+        display: flex;
+        flex-direction: column;
+        width: 25%;
+        text-transform: capitalize;
+
+    }
+
+    .classContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        width: 40%;
+
+    }
 }
 
 @media (prefers-color-scheme: dark) {

@@ -7,6 +7,7 @@ import styles from './styles.module.scss'
 
 type DataProps = {
     dataClass: ClassDataProps[];
+    // onDataChange: (newData: NewObject[]) => void;
 }
 type LevelsProps = {
     index: string;
@@ -44,18 +45,19 @@ type LevelsProps = {
         url: string;
 
     }]
-
 }
-interface ArrayLevelProps {
-
-}
-export default function CardClass({ dataClass }: DataProps) {
+export default function CardClass({ dataClass, /*onDataChange*/ }: DataProps) {
     const [loading, setLoading] = useState(true)
+    const apiClientExternal = setupAPIClientExternal();
 
     const [classData, setClassData] = useState<ClassDataProps[] | null>(null)
     const [classLevel, setClassLevel] = useState<LevelsProps[]>([])
+
     const [featDesc, setFeatDesc] = useState([])
-    console.log("esse é o featDesc: ", featDesc)
+    const [featInvoc, setFeatInvoc] = useState([])
+    const [invocDesc, setInvocDesc] = useState([])
+    const [subFeatDesc, setSubFeatDesc] = useState([])
+    // console.log(classLevel)
 
     useEffect(() => {
         if (dataClass) {
@@ -67,23 +69,31 @@ export default function CardClass({ dataClass }: DataProps) {
         if (classData) {
             classLevels();
         }
-
-
     }, [classData])
     useEffect(() => {
         if (classLevel) {
             fetchFeatures();
+            // handleProfBonusList();
+        }
+    }, [classLevel])
+    useEffect(() => {
+        if (featDesc) {
+            fetchSubFeature();
+            fetchFeatInvocations();
         }
 
-    }, [classLevel])
+    }, [featDesc])
+    useEffect(() => {
+        if (featInvoc) {
+            fetchInvocations()
+        }
+    }, [featInvoc])
 
     async function classLevels() {
         const apiClientExternal = setupAPIClientExternal();
         setLoading(true);
-
         try {
             const classLevelsPromises = classData.map(async (item) => {
-
                 const response = await apiClientExternal.get(item.data.class_levels)
                 return {
                     index: item.data.index,
@@ -92,7 +102,6 @@ export default function CardClass({ dataClass }: DataProps) {
             })
             const promiseResult = await Promise.all(classLevelsPromises);
             setClassLevel(promiseResult);
-            console.log("Esse é o array resultante da chamada: ", promiseResult)
         } catch (err) {
             console.log("Erro ao buscar dados dos níveis das classes", err)
         } finally {
@@ -124,6 +133,100 @@ export default function CardClass({ dataClass }: DataProps) {
             setLoading(false);
         }
     }
+    async function fetchSubFeature() {
+        if (!featDesc) return console.log("não está reconhecendo featDesc")
+        const apiClientExternal = setupAPIClientExternal();
+        setLoading(true)
+        try {
+
+            const subFeaturePromises = featDesc.flatMap((feat) => {
+                if (feat.description.feature_specific) {
+                    if (feat.description.feature_specific.subfeature_options) {
+                        if (feat.description.feature_specific.subfeature_options.from) {
+                            return feat.description.feature_specific.subfeature_options.from.options.map(async (subfeat) => {
+                                const response = await apiClientExternal.get(subfeat.item.url)
+                                return {
+                                    ...subfeat,
+                                    description: response.data
+                                }
+                            })
+                        }
+                    }
+                }
+                return [];
+            })
+            const subFeatureDescriptions = await Promise.all(subFeaturePromises)
+            setSubFeatDesc(subFeatureDescriptions);
+        } catch (err) {
+            console.log("Erro ao buscar as subfeatures: ", err)
+        } finally {
+            setLoading(false)
+        }
+
+    }
+    async function fetchFeatInvocations() {
+        if (!featDesc) return;
+
+        setLoading(true)
+
+        try {
+            const FeatureInvocationsPromises = featDesc.flatMap((feat) => {
+                if (feat.description.feature_specific && feat.description.feature_specific.invocations) {
+                    return feat.description.feature_specific.invocations.map(async (featInvoc) => {
+                        const response = await apiClientExternal.get(featInvoc.url);
+
+                        return {
+                            ...featInvoc,
+                            description: response.data
+                        }
+                    })
+                }
+                return [];
+            })
+            const subFeatureInvocations = await Promise.all(FeatureInvocationsPromises)
+            setFeatInvoc(subFeatureInvocations)
+
+        } catch (err) {
+            console.log("Erro ao buscar invocações das features: ", err)
+
+        } finally {
+            setLoading(false)
+        }
+    }
+    async function fetchInvocations() {
+        if (!featInvoc) return;
+        setLoading(true)
+        try {
+            const invocationsPromises = featInvoc.map(async (invocation) => {
+                const response = await apiClientExternal(invocation.url)
+
+                return {
+                    ...invocation,
+                    description: response.data
+                }
+            })
+            const invocations = await Promise.all(invocationsPromises)
+            setInvocDesc(invocations)
+
+
+        } catch (err) {
+            console.log("Erro ao buscar dados das invocações: ", err)
+
+        } finally {
+            setLoading(false)
+        }
+    }
+    // function handleProfBonusList() {
+    //     const newArray: NewObject[] = classLevel.flatMap(({ data }) => (
+    //         data.map(({ level, prof_bonus }) => ({
+    //             level,
+    //             prof_bonus
+    //         }))
+    //     ))
+    //     onDataChange(newArray)
+    // }
+    //criar uma função pra pegar class_specific das classes, salvar em useStates e apresentar
+
 
     if (loading) return <div>Carregando dados da classe...</div>
 
@@ -183,7 +286,7 @@ export default function CardClass({ dataClass }: DataProps) {
                                             {item.data.starting_equipment.length ? item.data.starting_equipment.map((item, index) => (
                                                 <p key={index}>{item.quantity} {item.equipment.name}</p>
                                             )) : (
-                                                <p>Nenhum equipamento inicial para a classe</p>
+                                                <p>Você não recebe nenhum equipamento inicial da classe</p>
                                             )}
 
                                         </div>
@@ -197,7 +300,7 @@ export default function CardClass({ dataClass }: DataProps) {
                                         </div>
                                     </div>
                                     <div className={styles.infoContainer}>
-                                        <h4>Conjuração</h4>
+                                        <h4>habil. Conjuração</h4>
                                         {item.data.spellcasting?.spellcasting_ability ? (
                                             <>
                                                 {translate(item.data.spellcasting.spellcasting_ability.name)}
@@ -237,8 +340,42 @@ export default function CardClass({ dataClass }: DataProps) {
                                                                 <div className={styles.featureContainer} key={index}>
                                                                     <p className={styles.featureName}>{feat.name}</p>
                                                                     {feat.description.desc.map((desc, descIndex) => (
-                                                                        <p className={styles.featureDesc} key={descIndex}>{desc}</p>
+                                                                        <div key={descIndex} className={styles.featureDesc}>
+                                                                            <p>{desc}</p>
+                                                                            {subFeatDesc && (
+                                                                                subFeatDesc.map((item, index) => (
+                                                                                    item.description.parent.index === feat.index && (
+                                                                                        <div key={index} className={styles.featContainer}>
+                                                                                            <h4>{item.description.name}</h4>
+                                                                                            {item.description.desc.map((desc, index) => (
+                                                                                                <p key={index}>{desc}</p>
+                                                                                            ))}
+                                                                                        </div>
+                                                                                    )
+
+
+                                                                                ))
+                                                                            )}
+                                                                            {invocDesc && (
+                                                                                invocDesc.map((invocation, index) => (
+                                                                                    invocation.description.parent.index === feat.index && (
+                                                                                        <div key={index}>
+                                                                                            <h4>{invocation.description.name}</h4>
+                                                                                            {invocation.description.desc.map((item, index) => (
+                                                                                                <p key={index}>{item}</p>
+                                                                                            ))}
+
+                                                                                        </div>
+
+                                                                                    )
+
+                                                                                ))
+                                                                            )}
+
+                                                                        </div>
+
                                                                     ))}
+
                                                                 </div>
                                                             )
                                                         )

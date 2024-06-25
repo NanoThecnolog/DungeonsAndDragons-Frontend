@@ -92,17 +92,34 @@ export default function CardRace({ dataRace }: DataRace) {
                         <div className={styles.traits}>
                             <div className={styles.raceTraits}>
                                 <div>
-                                    {trait.map((item, index) => (
-                                        <div key={index} className={styles.traitsContainer}>
-                                            <h4>{item.name}</h4>
-                                            {item.desc.map((item, index) => (
-                                                <span key={index}>{item}</span>
-                                            ))}
+                                    <div className={styles.raceContainer}>
+                                        {trait.map((item, index) => (
+                                            <div key={index} className={styles.traitsContainer}>
+                                                <h4>{item.name}</h4>
+                                                {item.desc.map((item, index) => (
+                                                    <span key={index}>{item}</span>
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className={styles.raceContainer}>
+                                        <div className={styles.languagesTraits}>
+                                            <h4>Idiomas conhecidos</h4>
+                                            {raceData.language_desc && (
+                                                <p>{raceData.language_desc}</p>
+                                            )}
                                         </div>
-                                    ))}
+                                    </div>
                                 </div>
-                                <div>
-                                    <div className={styles.habilidadesContainer}>
+                                <div className={styles.raceContainer}>
+                                    <div className={styles.raceInfo}>
+                                        <h4>Estatura</h4>
+                                        {raceData.size_description && (
+                                            <p>{raceData.size_description}</p>
+                                        )}
+
+                                    </div>
+                                    <div className={styles.raceInfo}>
                                         <h4>Bonus em habilidades</h4>
                                         {raceData.ability_bonuses.map((item, index) => (
                                             <div key={index}>
@@ -110,11 +127,11 @@ export default function CardRace({ dataRace }: DataRace) {
                                             </div>
                                         ))}
                                     </div>
-                                    <div className={styles.ageContainer}>
+                                    <div className={styles.raceInfo}>
                                         <h4>Longevidade</h4>
                                         <p>{raceData.age}</p>
                                     </div>
-                                    <div className={styles.tendenciaContainer}>
+                                    <div className={styles.raceInfo}>
                                         <h4>Tendência:</h4>
                                         <span>{raceData.alignment}</span>
                                     </div>
@@ -134,23 +151,12 @@ export default function CardRace({ dataRace }: DataRace) {
 
 
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={styles.row}>
-                            <div className={styles.raceTraits}>
-                                <div className={styles.languagesTraits}>
-                                    <h4>Idiomas conhecidos</h4>
-                                    {raceData.language_desc && (
-                                        <p>{raceData.language_desc}</p>
-                                    )}
 
                                 </div>
-                                <div className={styles.languagesTraits}>
-                                    <h4>Estatura</h4>
-                                    {raceData.size_description && (
-                                        <p>{raceData.size_description}</p>
-                                    )}
+                            </div>
+
+                            <div className={styles.row}>
+                                <div className={styles.raceTraits}>
 
                                 </div>
                             </div>

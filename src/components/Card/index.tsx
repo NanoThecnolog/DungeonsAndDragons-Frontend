@@ -62,14 +62,17 @@ export default function Card({ id, name, title, race, char_class, image, onDelet
                         </div>
                     )}
                     <div className={styles.cardLink} onClick={() => handleOnClick(id)}>
-                        <div>
+                        <div className={styles.nameContainer}>
                             <h3 className={styles.textName}>{name}</h3>
                             {title && (
                                 <p className={styles.titulo}>"{title}"</p>
                             )}
 
                         </div>
-                        <div>
+                        <div className={styles.raceContainer}>
+                            <h5>{race}</h5>
+                        </div>
+                        <div className={styles.classContainer}>
                             {char_class.map(item => (
                                 <div key={item.id} className={styles.class}>
                                     <p>{item.name}</p>

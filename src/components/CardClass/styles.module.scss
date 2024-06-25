@@ -54,18 +54,24 @@
 
             .conjuration {
                 width: 95%;
+                margin-top: 0.4rem;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
 
+                h4 {
+                    padding: 1rem 0;
+                    color: var(--verdeMenta);
+                }
+
                 .conjurationTypes {
                     display: flex;
+                    padding: 0.5rem 0;
 
                     .conjurationName {
                         width: 10%;
                         display: flex;
-                        align-items: center;
-                        padding: 1rem 0;
+                        align-items: flex-start;
                     }
 
                     .conjurationDesc {
@@ -74,16 +80,11 @@
                         align-items: center;
                         font-style: italic;
                         text-align: justify;
-
-
                     }
-
-
                 }
             }
 
             .features {
-
                 h3 {
                     font-size: 1.5rem;
                 }
@@ -91,19 +92,20 @@
                 .featureContainer {
                     padding: 1rem;
 
-
-
                     .featureName {
                         font-size: 1.2rem;
                         color: var(--verdeMenta);
-                        margin-bottom: 0.5rem;
-
                     }
 
                     .featureDesc {
                         font-style: italic;
-                    }
+                        text-align: justify;
+                        padding: 0 1rem 0 1rem;
 
+                        .featContainer {
+                            padding: 0.5rem;
+                        }
+                    }
                 }
 
             }

@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { setupAPIClient } from "@/services/api";
 import { ClassDataProps } from "@/pages/char";
 import { RaceDataProps } from "@/pages/char";
+// import { NewObject } from "../CardClass";
 import CardRace from "../CardRace";
 import CardClass from "../CardClass";
 
@@ -100,20 +101,26 @@ export default function Geral({ charData, skills, setUpdate, classData, raceData
     const [id, setId] = useState(null);
     const [modalVisible, setModalVisible] = useState(false)
     const [experience, setExperience] = useState<number>(0)
+
     const [proficiencyBonus, setProficiencyBonus] = useState<number>(0)
+    // const [profBonus, setProfBonus] = useState<NewObject[]>([])
+
     const { count, results } = skills;
     const [skillsList, setSkillsList] = useState([])
+
     const [char, setChar] = useState(charData.char)
     const [charClass, setCharClass] = useState(charData.charClass)
-    console.log(classData);
+    // console.log(classData);
     const [name, setName] = useState(char.name);
     const [title, setTitle] = useState(char.title);
+
     const [modifyStr, setModifyStr] = useState("");
     const [modifyDex, setModifyDex] = useState("");
     const [modifyCon, setModifyCon] = useState("");
     const [modifyInt, setModifyInt] = useState("");
     const [modifyWis, setModifyWis] = useState("");
     const [modifyCha, setModifyCha] = useState("");
+
     const [ca, setCa] = useState(10);
     const [baseArmorClass, setBaseArmorClass] = useState(0);
     const [heavySet, setHeavySet] = useState(false);
@@ -192,6 +199,7 @@ export default function Geral({ charData, skills, setUpdate, classData, raceData
     }, [char.experience, experienceLimit]);
 
     useEffect(() => {
+        //put shield in this calculation later
         function armorClassCalculate() {
             if (lightSet) {
                 if (Number(modifyDex) > 0) {
@@ -286,23 +294,20 @@ export default function Geral({ charData, skills, setUpdate, classData, raceData
     function handleNivel() {
         console.log('nível para mudar')
     }
-
-    function handleCA() {
-        console.log("CA")
-        //modal deve conter opção para modificadores mágicos, poder adicionar esses modificadores.
-        //mostrar também a composição atual do CA do personagem.
-    }
     function handleCloseModal() {
         setModalVisible(false);
         setUpdate(true)
     }
+    // function handleDataChange(newData: NewObject[]) {
+    //     setProfBonus(newData)
+    // }    
 
     if (!charData) {
         return <div>Carregando...</div>
     }
     return (
         char ? (
-            <div className={styles.container}>
+            <div className={styles.container} >
                 <div className={styles.dataContainer}>
                     <div className={styles.row}>
                         <div className={styles.image} style={{ backgroundImage: `url(http://localhost:3333/files/${char.image})` }} onClick={handleImage}>
@@ -340,7 +345,7 @@ export default function Geral({ charData, skills, setUpdate, classData, raceData
                                     <p><strong>{char.background}</strong></p>
                                 </div>
                                 <div className={styles.ca}>
-                                    <div className={styles.editar} onClick={handleCA}><TbSettings size={25} /></div>
+                                    <div className={styles.editar}><TbSettings size={25} /></div>
                                     <p>CA</p>
                                     <p>{ca}</p>
                                 </div>
@@ -394,33 +399,33 @@ export default function Geral({ charData, skills, setUpdate, classData, raceData
                             <div className={styles.statusContainer}>
                                 <div className={styles.status}>
                                     <h4 className={styles.statusText}>Força</h4>
-                                    <p className={styles.statusValue}>{char.str}</p>
-                                    <p className={styles.statusModify}>({modifyStr})</p>
+                                    <p className={styles.statusValue}>{modifyStr}</p>
+                                    <p className={styles.statusModify}>({char.str})</p>
                                 </div>
                                 <div className={styles.status}>
                                     <h4 className={styles.statusText}>Dextreza</h4>
-                                    <p className={styles.statusValue}>{char.dex}</p>
-                                    <p className={styles.statusModify}>({modifyDex})</p>
+                                    <p className={styles.statusValue}>{modifyDex}</p>
+                                    <p className={styles.statusModify}>({char.dex})</p>
                                 </div>
                                 <div className={styles.status}>
                                     <h4 className={styles.statusText}>Constituição</h4>
-                                    <p className={styles.statusValue}>{char.con}</p>
-                                    <p className={styles.statusModify}>({modifyCon})</p>
+                                    <p className={styles.statusValue}>{modifyCon}</p>
+                                    <p className={styles.statusModify}>({char.con})</p>
                                 </div>
                                 <div className={styles.status}>
                                     <h4 className={styles.statusText}>Inteligência</h4>
-                                    <p className={styles.statusValue}>{char.int}</p>
-                                    <p className={styles.statusModify}>({modifyInt})</p>
+                                    <p className={styles.statusValue}>{modifyInt}</p>
+                                    <p className={styles.statusModify}>({char.int})</p>
                                 </div>
                                 <div className={styles.status}>
                                     <h4 className={styles.statusText}>Sabedoria</h4>
-                                    <p className={styles.statusValue}>{char.wis}</p>
-                                    <p className={styles.statusModify}>({modifyWis})</p>
+                                    <p className={styles.statusValue}>{modifyWis}</p>
+                                    <p className={styles.statusModify}>({char.wis})</p>
                                 </div>
                                 <div className={styles.status}>
                                     <h4 className={styles.statusText}>Carisma</h4>
-                                    <p className={styles.statusValue}>{char.cha}</p>
-                                    <p className={styles.statusModify}>({modifyCha})</p>
+                                    <p className={styles.statusValue}>{modifyCha}</p>
+                                    <p className={styles.statusModify}>({char.cha})</p>
                                 </div>
 
                             </div>
@@ -470,6 +475,7 @@ export default function Geral({ charData, skills, setUpdate, classData, raceData
                             />
                             <CardClass
                                 dataClass={classData}
+                            // onDataChange={handleDataChange}
                             />
                         </div>
 

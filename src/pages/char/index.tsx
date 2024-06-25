@@ -14,6 +14,7 @@ import UpdateGeral from "@/components/updates/Geral";
 import styles from "./styles.module.scss"
 import Modal from "react-modal";
 
+
 type ClassProps = {
     id: string;
     index: string;
@@ -307,6 +308,7 @@ export default function Char({ skills, spells }: SkillComponentProps) {
     }, [id, update]);
 
     useEffect(() => {
+        if (!charData) return
         async function fecthClassData() {
             const apiClientExternal = setupAPIClientExternal();
             if (classData.length === 0) {
@@ -395,6 +397,7 @@ export default function Char({ skills, spells }: SkillComponentProps) {
                 <>
                     {renderComponent()}
                 </>
+
             </div>
         </>
     )
