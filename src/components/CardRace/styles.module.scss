@@ -1,5 +1,6 @@
 .info {
     width: 100%;
+
     border: 3px solid var(--color-text);
     border-radius: 0.4rem;
     margin: 0.5rem 0;
@@ -12,7 +13,9 @@
     .racaContainer {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         width: 100%;
+
 
         .raca {
             display: flex;
@@ -34,18 +37,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin: 1rem;
             width: 100%;
+
 
 
             .raceTraits {
                 display: flex;
                 justify-content: center;
                 align-items: flex-start;
-
-                // div+div {
-                //     margin: 0.5rem 0;
-                // }
 
                 .raceContainer {
                     margin: 0 1rem;
@@ -71,6 +70,11 @@
                         align-items: flex-start;
                         padding-right: 2rem;
 
+
+                        .proficiencyBox {
+                            display: flex;
+                        }
+
                         .proficiencyItem {
                             margin: 0.2rem 0 0 0.5rem;
                         }
@@ -79,7 +83,8 @@
                             font-size: 0.8rem;
                             font-style: italic;
                             padding: 1rem 0 0 0.5rem;
-
+                            width: 70%;
+                            margin-left: auto;
                         }
                     }
 
@@ -88,11 +93,28 @@
                         flex-direction: column;
                         justify-content: center;
                         align-items: flex-start;
+                        padding-top: 0.5rem;
 
                         span {
                             font-size: 0.9rem;
                             font-style: italic;
                             text-align: justify;
+                        }
+                    }
+
+                    .skillContainer {
+                        display: flex;
+                        flex-direction: column;
+                        padding-top: 5rem;
+
+                        .skillOptionsContainer {
+                            h4 {
+                                padding-top: 0.5rem;
+                            }
+
+                            p {
+                                padding-top: 1rem 0;
+                            }
                         }
                     }
 
@@ -107,7 +129,7 @@
             justify-content: flex-start;
             align-items: flex-start;
             width: 100%;
-            margin-top: 1.5rem;
+            margin-top: 0.5rem;
 
             p {
                 font-size: 0.8rem;

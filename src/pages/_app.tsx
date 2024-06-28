@@ -2,17 +2,15 @@ import type { AppProps } from "next/app";
 import "./globals.scss";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { useState } from "react";
-import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { AuthProvider, AuthContext } from "@/contexts/AuthContext";
 import ReactHowler from 'react-howler';
 import ScrollToTop from "@/components/ui/ScrollToTop";
+import { appWithTranslation } from 'next-i18next';
+import nextI18NextConfig from '../../next-i18next.config.js';
+// const nextI18NextConfig = require('../../next-i18next.config.js');
 
-
-export default function App({ Component, pageProps }: AppProps) {
-
-
+function app({ Component, pageProps }: AppProps) {
 
     return (
         <AuthProvider>
@@ -29,6 +27,8 @@ export default function App({ Component, pageProps }: AppProps) {
                     );
                 }}
             </AuthContext.Consumer>
+
+
             <Component {...pageProps} />
             <ToastContainer autoClose={3000} />
             <Footer />
@@ -37,3 +37,5 @@ export default function App({ Component, pageProps }: AppProps) {
         </AuthProvider>
     )
 }
+
+export default appWithTranslation(app, nextI18NextConfig)

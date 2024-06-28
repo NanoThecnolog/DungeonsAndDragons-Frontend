@@ -175,9 +175,9 @@ export default function New_Char({ classes, races }: CharProps) {
                     </main>
                 </div>
             )}
-            <>
+            <main className={styles.container}>
                 {renderComponent()}
-            </>
+            </main>
         </>
     )
 }

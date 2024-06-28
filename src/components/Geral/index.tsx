@@ -87,7 +87,18 @@ export function translate(name: string) {
         'INT': 'Inteligência',
         'WIS': 'Sabedoria',
         'CHA': 'Carisma',
-        'Saving Throw': 'Testes de resistência'
+        'Saving Throw': 'Testes de resistência',
+        'Draconic Ancestry (Black)': 'Black',
+        'Draconic Ancestry (Blue)': 'Blue',
+        'Draconic Ancestry (Brass)': 'Brass',
+        'Draconic Ancestry (Bronze)': 'Bronze',
+        'Draconic Ancestry (Copper)': 'Copper',
+        'Draconic Ancestry (Gold)': 'Gold',
+        'Draconic Ancestry (Green)': 'Green',
+        'Draconic Ancestry (Red)': 'Red',
+        'Draconic Ancestry (Silver)': 'Silver',
+        'Draconic Ancestry (White)': 'White',
+        'Acid': 'Acido'
     }
     let translated = name;
     for (const [key, value] of Object.entries(translation)) {

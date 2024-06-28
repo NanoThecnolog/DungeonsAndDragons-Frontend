@@ -1,12 +1,23 @@
 import { useState, useEffect, useSyncExternalStore } from 'react'
 import { RaceDataProps } from '@/pages/char'
 import { setupAPIClientExternal } from '@/services/apiD&D/apiExternal'
-import { translate } from '../Geral'
-
+import { t } from '../../services/translate/t'
 import styles from './styles.module.scss'
+
 
 type DataRace = {
     dataRace: RaceDataProps
+}
+type SkillDataProps = {
+    index: string
+    name: string
+    desc: [string]
+    ability_score: {
+        index: string
+        name: string
+        url: string
+    }
+    url: string
 }
 
 export default function CardRace({ dataRace }: DataRace) {
@@ -14,6 +25,9 @@ export default function CardRace({ dataRace }: DataRace) {
     const [loading, setLoading] = useState(false)
     const [raceData, setRaceData] = useState<RaceDataProps | null>(null)
     const [trait, setTrait] = useState([])
+    const [skill, setSkill] = useState<SkillDataProps[]>([])
+    // console.log(raceData)
+    console.log(raceData)
 
     const apiClientExternal = setupAPIClientExternal();
 
@@ -26,6 +40,7 @@ export default function CardRace({ dataRace }: DataRace) {
     useEffect(() => {
         if (raceData) {
             traitsDesc();
+            fecthProficiencyOptions();
         }
 
 
@@ -61,6 +76,53 @@ export default function CardRace({ dataRace }: DataRace) {
         }
 
     }
+    async function fecthProficiencyOptions() {
+        if (!raceData) {
+            console.warn("raceData não definido.")
+            return;
+        }
+        // console.log("Iniciando função")
+        setLoading(true)
+
+        if (raceData.starting_proficiency_options) {
+            const options = raceData.starting_proficiency_options.from.options;
+            // console.log("Iniciando as Promises")
+
+            const allSkillData = [];
+
+            const optionPromises = options.map(async (option) => {
+                try {
+                    const response = await apiClientExternal.get(option.item.url)
+                    const optionData = response.data;
+                    // console.log("Resposta com as informações das options pronta. ", optionData)
+
+                    if (optionData.reference) {
+                        try {
+                            const response = await apiClientExternal.get(optionData.reference.url)
+                            const skillData = response.data;
+                            // console.log("Requisição da referência das perícias pronta. ", skillData)
+                            allSkillData.push(skillData)
+                        } catch (err) {
+                            console.error("Erro ao buscar descrição de perícias:", err);
+                        }
+                    }
+                } catch (err) {
+                    console.error("Erro ao buscar as opções de proficiências na API externa: ", err);
+                }
+            });
+            try {
+                await Promise.all(optionPromises);
+                setSkill(allSkillData)
+            } catch (err) {
+                console.error("Erro ao buscar opções de proficiências: ", err);
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            console.error("Sem opções de proficiencia")
+            setLoading(false)
+        }
+    }
 
     if (loading) {
         return <div>Carregando raça...</div>
@@ -93,25 +155,78 @@ export default function CardRace({ dataRace }: DataRace) {
                             <div className={styles.raceTraits}>
                                 <div>
                                     <div className={styles.raceContainer}>
-                                        {trait.map((item, index) => (
-                                            <div key={index} className={styles.traitsContainer}>
-                                                <h4>{item.name}</h4>
-                                                {item.desc.map((item, index) => (
-                                                    <span key={index}>{item}</span>
-                                                ))}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className={styles.raceContainer}>
                                         <div className={styles.languagesTraits}>
                                             <h4>Idiomas conhecidos</h4>
                                             {raceData.language_desc && (
-                                                <p>{raceData.language_desc}</p>
+                                                <p>{t(raceData.language_desc)}</p>
                                             )}
                                         </div>
                                     </div>
+                                    <div className={styles.raceContainer}>
+                                        {trait &&
+                                            trait.map((item, index) => (
+                                                <div key={index} className={styles.traitsContainer}>
+                                                    <h4>{item.name}</h4>
+                                                    {item.desc.map((item, index) => (
+                                                        <span key={index}>{item}</span>
+                                                    ))}
+                                                </div>
+                                            ))
+                                        }
+
+                                    </div>
+                                    <div className={styles.raceContainer}>
+                                        {skill &&
+                                            <div className={styles.skillContainer}>
+                                                <h3>Opções de perícias</h3>
+                                                {skill.length ?
+                                                    skill.map((item, index) => (
+                                                        <div key={index} className={styles.skillOptionsContainer}>
+                                                            <h4>{item.name}</h4>
+                                                            {item.ability_score ?
+                                                                (<>
+                                                                    <p>({t(item.ability_score.name)})</p>
+                                                                </>) :
+                                                                (<>
+                                                                    <p>{item.desc}</p>
+                                                                </>)}
+
+
+
+                                                        </div>
+                                                    ))
+                                                    : (
+                                                        <>A merda da tua raça n da opção de perícia...Deve ser humano, o raça desgraçada!</>
+                                                    )}
+
+                                            </div>
+                                        }
+                                    </div>
+
                                 </div>
                                 <div className={styles.raceContainer}>
+                                    <div className={styles.proficiencyContainer}>
+                                        <h4>Proficiências da Raça</h4>
+                                        <div className={styles.proficiencyBox}>
+                                            <div>
+                                                {raceData.starting_proficiencies.length ? raceData.starting_proficiencies.map((item, index) => (
+                                                    <div className={styles.proficiencyItem} key={index}>
+                                                        <p>{item.name}</p>
+                                                    </div>
+
+                                                )) : (
+                                                    <p>Sem Proficiências da raça</p>
+                                                )}
+                                            </div>
+                                            <div>
+                                                {raceData.starting_proficiency_options && (
+                                                    <p className={styles.proficiencyOptions}>{raceData.starting_proficiency_options.desc}</p>
+                                                )}
+                                            </div>
+                                        </div>
+
+
+                                    </div>
                                     <div className={styles.raceInfo}>
                                         <h4>Estatura</h4>
                                         {raceData.size_description && (
@@ -123,7 +238,7 @@ export default function CardRace({ dataRace }: DataRace) {
                                         <h4>Bonus em habilidades</h4>
                                         {raceData.ability_bonuses.map((item, index) => (
                                             <div key={index}>
-                                                <p>{item.bonus} ponto(s) em {translate(item.ability_score.name)}</p>
+                                                <p>{item.bonus} ponto(s) em {t(item.ability_score.name)}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -135,22 +250,7 @@ export default function CardRace({ dataRace }: DataRace) {
                                         <h4>Tendência:</h4>
                                         <span>{raceData.alignment}</span>
                                     </div>
-                                    <div className={styles.proficiencyContainer}>
-                                        <h4>Proficiências da Raça</h4>
-                                        {raceData.starting_proficiencies.length ? raceData.starting_proficiencies.map((item, index) => (
-                                            <div className={styles.proficiencyItem} key={index}>
-                                                <p>{item.name}</p>
-                                            </div>
 
-                                        )) : (
-                                            <p>Sem Proficiências da raça</p>
-                                        )}
-                                        {raceData.starting_proficiency_options && (
-                                            <p className={styles.proficiencyOptions}>{raceData.starting_proficiency_options.desc}</p>
-                                        )}
-
-
-                                    </div>
 
                                 </div>
                             </div>
