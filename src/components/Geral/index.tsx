@@ -79,34 +79,7 @@ interface TraitsProps {
     url: string;
 }
 
-export function translate(name: string) {
-    const translation: { [key: string]: string } = {
-        'STR': 'Força',
-        'DEX': 'Destreza',
-        'CON': 'Constituição',
-        'INT': 'Inteligência',
-        'WIS': 'Sabedoria',
-        'CHA': 'Carisma',
-        'Saving Throw': 'Testes de resistência',
-        'Draconic Ancestry (Black)': 'Black',
-        'Draconic Ancestry (Blue)': 'Blue',
-        'Draconic Ancestry (Brass)': 'Brass',
-        'Draconic Ancestry (Bronze)': 'Bronze',
-        'Draconic Ancestry (Copper)': 'Copper',
-        'Draconic Ancestry (Gold)': 'Gold',
-        'Draconic Ancestry (Green)': 'Green',
-        'Draconic Ancestry (Red)': 'Red',
-        'Draconic Ancestry (Silver)': 'Silver',
-        'Draconic Ancestry (White)': 'White',
-        'Acid': 'Acido'
-    }
-    let translated = name;
-    for (const [key, value] of Object.entries(translation)) {
-        const regex = new RegExp(key, 'g');
-        translated = translated.replace(regex, value);
-    }
-    return translated;
-}
+
 
 export default function Geral({ charData, skills, setUpdate, classData, raceData }: CharDataProps) {
     const [id, setId] = useState(null);

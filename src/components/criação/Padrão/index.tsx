@@ -283,44 +283,17 @@ type SubTraitProps = {
     }
     subrace: string;
 }
-
-// export function translate(name: string) {
-//     const translation: { [key: string]: string } = {
-//         'STR': 'Força',
-//         'DEX': 'Destreza',
-//         'CON': 'Constituição',
-//         'INT': 'Inteligência',
-//         'WIS': 'Sabedoria',
-//         'CHA': 'Carisma',
-//         'Saving Throw': 'Testes de resistência',
-//         'Draconic Ancestry (Black)': 'Black',
-//         'Draconic Ancestry (Blue)': 'Blue',
-//         'Draconic Ancestry (Brass)': 'Brass',
-//         'Draconic Ancestry (Bronze)': 'Bronze',
-//         'Draconic Ancestry (Copper)': 'Copper',
-//         'Draconic Ancestry (Gold)': 'Gold',
-//         'Draconic Ancestry (Green)': 'Green',
-//         'Draconic Ancestry (Red)': 'Red',
-//         'Draconic Ancestry (Silver)': 'Silver',
-//         'Draconic Ancestry (White)': 'White',
-//         'Acid': 'Acido'
-//     }
-//     let translated = name;
-//     for (const [key, value] of Object.entries(translation)) {
-//         const regex = new RegExp(key, 'g');
-//         translated = translated.replace(regex, value);
-//     }
-//     return translated;
-// }
+type ExtraAbilityProps = {
+    index: string
+    name: string
+    bonus: number
+}
 
 
 export default function StandardCreate() {
     const [loading, setLoading] = useState(false)
     const apiClient = setupAPIClient()
     const apiClientExternal = setupAPIClientExternal()
-
-
-    // console.log("renderizando Standard")
 
     const [stepOneVisible, setStepOneVisible] = useState<boolean>(true)
     const [stepTwoVisible, setStepTwoVisible] = useState<boolean>(false)
@@ -345,6 +318,10 @@ export default function StandardCreate() {
     const [subTrait, setSubTrait] = useState<SubTraitProps[]>([])
     const [subTraitSpecificOptions, setSubTraitSpecificOptions] = useState<string>("")
     const [specificOptions, setSpecificOptions] = useState<string>("")
+    const [toolProficiency, setToolProficiency] = useState<string>("")
+    const [elvySkillOptions, setElvySkillOptions] = useState<string[]>([])
+    const [extraLanguage, setExtraLanguage] = useState<string>("")
+    const [extraAbility, setExtraAbility] = useState<ExtraAbilityProps[]>([])
     //verificar oq precisa escolher pra cada raça
     console.log(race)
 
@@ -367,7 +344,7 @@ export default function StandardCreate() {
     const [lifeStyle, setLifeStyles] = useState<string>()// estilo de vida
     const [allies, setAllies] = useState<string>()// aliados
     const [enemies, setEnemies] = useState<string>()//inimigos
-    const [story, setStory] = useState<string>()//história
+    const [story, setStory] = useState<string>()//história    
     //fazer a lógica pra definição dessas variáveis
 
     const [initEquip, setInitEquip] = useState<string>()
@@ -410,6 +387,47 @@ export default function StandardCreate() {
     function handleStepTwo() {
         setStepTwoVisible(false)
         setStepThreeVisible(true)
+    }
+    function handleELvySkillOptions(e) {
+        let value = e.target.value as string | string[];
+        if (typeof value === 'string') {
+            value = value.split(',');
+        }
+
+        if (value.length > 2) {
+            value = value.slice(0, 2);
+        }
+
+        setElvySkillOptions(value);
+    };
+    function handleExtraAbility(e) {
+        let value = e.target.value as string | string[];
+        if (typeof value === 'string') {
+            value = value.split(',');
+        }
+
+        // Map the selected values to objects with index, name, and bonus
+        const selectedAbilities = value.map(val => {
+            let ability;
+            raceData.some(race => {
+                ability = race.raceData.ability_bonus_options?.from.options.find(
+                    (opt) => opt.ability_score.index === val
+                );
+                return ability;
+            })
+            return {
+                index: ability?.ability_score.index || "",
+                name: ability?.ability_score.name || "",
+                bonus: ability?.bonus || 0
+            };
+        });
+
+        // Limit the selected abilities to 2
+        if (selectedAbilities.length > 2) {
+            selectedAbilities.length = 2;
+        }
+
+        setExtraAbility(selectedAbilities);
     }
     async function fetchRacesData() {
         setLoading(true)
@@ -720,27 +738,61 @@ export default function StandardCreate() {
                                                                 </div>
                                                                 <div className={styles.raceDesc}>
                                                                     <h4>Longevidade</h4>
-                                                                    <p>{race.raceData.age}</p>
+                                                                    <p>{t(race.raceData.age)}</p>
+                                                                </div>
+                                                                {///////////////////////////////////////////////////////
+                                                                }
+                                                                <div>
+                                                                    <h4>Idiomas</h4>
+                                                                    <p>{t(race.raceData.language_desc)}</p>
+
+                                                                    {race.raceData.language_options && (
+                                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                                                                            <div>
+                                                                                <h5>Escolha um idioma extra</h5>
+                                                                                <FormControl sx={{ m: 1, minWidth: 350 }}>
+                                                                                    <Select
+                                                                                        value={extraLanguage}
+                                                                                        onChange={(e) => setExtraLanguage(e.target.value)}
+                                                                                    >
+                                                                                        <MenuItem value="">Nenhum escolhido</MenuItem>
+                                                                                        {race.raceData.language_options.from.options.map((language, index) => (
+                                                                                            <MenuItem key={index} value={language.item.index}>{t(language.item.name)}</MenuItem>
+                                                                                        ))}
+                                                                                    </Select>
+                                                                                </FormControl>
+                                                                            </div>
+
+                                                                            {extraLanguage != "" && (
+                                                                                <div>
+                                                                                    <h5>Você escolheu:</h5>
+                                                                                    <p>{t(extraLanguage)}</p>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    )
+
+                                                                    }
                                                                 </div>
                                                                 <div>
                                                                     {race.raceData.traits.length > 0 && (
                                                                         <>
-                                                                            <div>
-                                                                                <h4>Racial Traits</h4>
+                                                                            <div style={{ paddingTop: '1.5rem' }}>
+                                                                                <h3>Traços Raciais</h3>
                                                                             </div>
 
                                                                             {race.raceData.traits.map((trait) => (
                                                                                 <div key={trait.index} className={styles.raceTraits}>
-                                                                                    <h4>{trait.name}</h4>
+                                                                                    <h4>{t(trait.name)}</h4>
                                                                                     <div className={styles.traitDesc}>
                                                                                         {traits
                                                                                             .filter((desc) => desc.race === race.raceData.name && desc.data.name === trait.name)
                                                                                             .flatMap((desc) => desc.data.desc)
                                                                                             .map((item, index) => (
-                                                                                                <p key={index}>{item}</p>
+                                                                                                <p key={index}>{t(item)}</p>
                                                                                             ))
                                                                                         }
-                                                                                        <Button type='button' onClick={(e) => console.log(trait.index)}>console</Button>
                                                                                     </div>
                                                                                     {trait.index === 'breath-weapon' && (
                                                                                         <Accordion>
@@ -772,7 +824,7 @@ export default function StandardCreate() {
                                                                                                     </tbody>
                                                                                                 </table>
                                                                                                 {specificTrait.length > 0 && (
-                                                                                                    <div>
+                                                                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
                                                                                                         <div style={{ paddingTop: '1rem' }}>
                                                                                                             <h5>Escolha seu Ancestral Dracônico:</h5>
                                                                                                         </div>
@@ -803,6 +855,61 @@ export default function StandardCreate() {
                                                                                         </Accordion>
 
                                                                                     )}
+                                                                                    {trait.index === "tool-proficiency" && (
+                                                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                            <FormControl sx={{ m: 1, minWidth: 350 }}>
+                                                                                                <Select
+                                                                                                    value={toolProficiency}
+                                                                                                    onChange={(e) => setToolProficiency(e.target.value)}
+                                                                                                >
+                                                                                                    <MenuItem value="">Nenhum escolhido</MenuItem>
+                                                                                                    {race.raceData.starting_proficiency_options?.from.options.map((opt, index) => (
+                                                                                                        <MenuItem key={index} value={opt.item.index}>{t(opt.item.name)}</MenuItem>
+                                                                                                    ))}
+                                                                                                </Select>
+                                                                                            </FormControl>
+                                                                                            {toolProficiency != "" && (
+                                                                                                <div>
+                                                                                                    <h5>Ferramenta escolhida:</h5>
+                                                                                                    <p>{t(toolProficiency)}</p>
+                                                                                                </div>
+                                                                                            )}
+                                                                                        </div>
+
+                                                                                    )
+
+                                                                                    }
+                                                                                    {trait.index === "skill-versatility" && (
+                                                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                                            <div>
+                                                                                                <h5>Escolha duas perícias</h5>
+                                                                                                <FormControl sx={{ m: 1, minWidth: 350 }}>
+                                                                                                    <Select
+                                                                                                        value={elvySkillOptions}
+                                                                                                        multiple
+                                                                                                        onChange={handleELvySkillOptions}
+                                                                                                    >
+                                                                                                        <MenuItem value="">Nenhum escolhido</MenuItem>
+                                                                                                        {race.raceData.starting_proficiency_options?.from.options.map((opt, index) => (
+                                                                                                            <MenuItem key={index} value={opt.item.index}>{t(opt.item.name)}</MenuItem>
+                                                                                                        ))}
+                                                                                                    </Select>
+                                                                                                </FormControl>
+                                                                                            </div>
+                                                                                            {elvySkillOptions.length > 0 && (
+                                                                                                <div>
+                                                                                                    <h5>habilidade escolhida:</h5>
+                                                                                                    {elvySkillOptions.map((skill, index) => (
+                                                                                                        <p key={index}>{t(skill)}</p>
+                                                                                                    ))}
+
+                                                                                                </div>
+                                                                                            )}
+                                                                                        </div>
+
+                                                                                    )
+
+                                                                                    }
                                                                                 </div>
                                                                             ))}
                                                                         </>
@@ -815,6 +922,43 @@ export default function StandardCreate() {
                                                                         {race.raceData.ability_bonuses.map((attribute, index) => (
                                                                             <p key={index}>{attribute.bonus} ponto(s) em {t(attribute.ability_score.name)}</p>
                                                                         ))}
+                                                                        {race.raceData.ability_bonus_options && (
+                                                                            <div>
+                                                                                <h5>Você pode escolher mais {race.raceData.ability_bonus_options.choose} atributos para receber pontos.</h5>
+                                                                                <FormControl sx={{ m: 1, minWidth: 350 }}>
+                                                                                    <Select
+                                                                                        value={extraAbility.map(a => a.index)}
+                                                                                        multiple
+                                                                                        onChange={handleExtraAbility}
+                                                                                        renderValue={(selected) => {
+                                                                                            const selectedValues = selected as string[];
+                                                                                            return selectedValues
+                                                                                                .map(val => {
+                                                                                                    const ability = extraAbility.find(a => a.index === val);
+                                                                                                    return ability ? ability.name : '';
+                                                                                                })
+                                                                                                .join(', ');
+                                                                                        }}
+                                                                                    >
+                                                                                        <MenuItem value="">Nenhum escolhido</MenuItem>
+                                                                                        {race.raceData.ability_bonus_options.from.options.map((ability, index) => (
+                                                                                            <MenuItem key={index} value={ability.ability_score.index}>{t(ability.ability_score.name)}</MenuItem>
+                                                                                        ))}
+
+                                                                                    </Select>
+                                                                                </FormControl>
+                                                                                {extraAbility.length > 0 && (
+                                                                                    <div>
+                                                                                        <h5>habilidade escolhida:</h5>
+                                                                                        {extraAbility.map((skill, index) => (
+                                                                                            <p key={index}>{t(skill.name)}: {skill.bonus} ponto(s)</p>
+                                                                                        ))}
+
+                                                                                    </div>
+                                                                                )}
+
+                                                                            </div>
+                                                                        )}
 
                                                                     </div>
 

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import styles from './styles.module.scss'
 import { FaTrash } from 'react-icons/fa'
 import { FaSpinner } from 'react-icons/fa';
-import Link from 'next/link';
+import { t } from '@/services/translate/t';
 import Swal from 'sweetalert2'
 
 type ClassProps = {
@@ -70,12 +70,12 @@ export default function Card({ id, name, title, race, char_class, image, onDelet
 
                         </div>
                         <div className={styles.raceContainer}>
-                            <h5>{race}</h5>
+                            <h5>{t(race)}</h5>
                         </div>
                         <div className={styles.classContainer}>
                             {char_class.map(item => (
                                 <div key={item.id} className={styles.class}>
-                                    <p>{item.name}</p>
+                                    <p>{t(item.name)}</p>
                                     <p>{item.level}</p>
                                 </div>
                             ))}

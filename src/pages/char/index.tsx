@@ -185,6 +185,25 @@ export interface ClassDataProps {
 }
 export type RaceProps = {
     raceData: {
+        ability_bonus_options?: {
+            choose: number
+            from: {
+                option_set_type: string
+                options: [
+                    {
+                        ability_score: {
+                            index: string
+                            name: string
+                            url: string
+                        }
+                        bonus: number
+                        option_type: string
+                    }
+                ]
+                type: string
+            }
+            type: string
+        }
         ability_bonuses: [
             {
                 ability_score: {
@@ -199,6 +218,23 @@ export type RaceProps = {
         alignment: string;
         index: string;
         language_desc: string;
+        language_options?: {
+            choose: number
+            from: {
+                option_set_type: string;
+                options: [
+                    {
+                        item: {
+                            index: string;
+                            name: string;
+                            url: string;
+                        }
+                        option_type: string
+                    }
+                ]
+            }
+            type: string
+        }
         languages: [
             {
                 index: string;
