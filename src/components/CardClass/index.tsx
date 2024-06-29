@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { ClassDataProps } from "@/pages/char";
-import { translate } from "../Geral";
+import { t } from '@/services/translate/t'
 import { setupAPIClientExternal } from "@/services/apiD&D/apiExternal";
 
 import styles from './styles.module.scss'
@@ -255,7 +255,7 @@ export default function CardClass({ dataClass, /*onDataChange*/ }: DataProps) {
                                     <div className={styles.infoContainer}>
                                         <h4>Proficiências</h4>
                                         {item.data.proficiencies && item.data.proficiencies.map((item, index) => (
-                                            <p key={index}>{translate(item.name)}</p>
+                                            <p key={index}>{t(item.name)}</p>
                                         ))}
                                     </div>
                                     <div className={styles.infoContainer}>
@@ -268,7 +268,7 @@ export default function CardClass({ dataClass, /*onDataChange*/ }: DataProps) {
                                         <h4>Testes de resistência</h4>
                                         {item.data.saving_throws && item.data.saving_throws.map((item, index) => (
                                             <p key={index}>
-                                                {translate(item.name)}
+                                                {t(item.name)}
                                             </p>
                                         ))}
                                     </div>
@@ -303,7 +303,7 @@ export default function CardClass({ dataClass, /*onDataChange*/ }: DataProps) {
                                         <h4>habil. Conjuração</h4>
                                         {item.data.spellcasting?.spellcasting_ability ? (
                                             <>
-                                                {translate(item.data.spellcasting.spellcasting_ability.name)}
+                                                {t(item.data.spellcasting.spellcasting_ability.name)}
                                             </>
                                         ) : (
                                             <p>Classe sem conjuração</p>

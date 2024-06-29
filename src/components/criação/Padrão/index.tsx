@@ -816,7 +816,12 @@ export default function StandardCreate() {
                                                                                                                 <tr key={index} className={styles.trContainer}>
                                                                                                                     <td>{t(item.data.name)}</td>
                                                                                                                     <td>{t(item.data.trait_specific.damage_type.name)}</td>
-                                                                                                                    <td>{t(item.data.trait_specific.breath_weapon.area_of_effect.type)} de {(item.data.trait_specific.breath_weapon.area_of_effect.size * 0.3048).toFixed(1)}m (teste de {item.data.trait_specific.breath_weapon.dc.dc_type.name})</td>
+                                                                                                                    {item.data.trait_specific.breath_weapon.area_of_effect.type === 'line' ? (
+                                                                                                                        <td style={{ fontSize: '0.81rem' }}>{t(item.data.trait_specific.breath_weapon.area_of_effect.type)} de {((item.data.trait_specific.breath_weapon.area_of_effect.size * 0.2950) / 5.8).toFixed(1)} a {(item.data.trait_specific.breath_weapon.area_of_effect.size * 0.3000).toFixed(0)}m (teste de {t(item.data.trait_specific.breath_weapon.dc.dc_type.name)})</td>
+                                                                                                                    ) : (
+                                                                                                                        <td style={{ fontSize: '0.81rem' }}>{t(item.data.trait_specific.breath_weapon.area_of_effect.type)} de {(item.data.trait_specific.breath_weapon.area_of_effect.size * 0.3000).toFixed(1)}m (teste de {t(item.data.trait_specific.breath_weapon.dc.dc_type.name)})</td>
+                                                                                                                    )}
+
                                                                                                                 </tr>
 
 
@@ -1007,15 +1012,15 @@ export default function StandardCreate() {
                                                                                             {subTrait && subTrait.map((trait, index) => (
                                                                                                 trait.subrace === subrace.index && (
                                                                                                     <div key={index}>
-                                                                                                        <h4>{trait.subTrait.name}</h4>
+                                                                                                        <h4>{t(trait.subTrait.name)}</h4>
                                                                                                         {trait.subTrait.desc.map((desc, index) => (
                                                                                                             <div key={index} className={styles.subTraitDesc}>
-                                                                                                                <p>{desc}</p>
+                                                                                                                <p>{t(desc)}</p>
                                                                                                             </div>
                                                                                                         ))}
                                                                                                         {trait.subTrait.trait_specific && (
                                                                                                             <Accordion>
-                                                                                                                <AccordionSummary>{trait.subTrait.name}</AccordionSummary>
+                                                                                                                <AccordionSummary>{t(trait.subTrait.name)}</AccordionSummary>
                                                                                                                 <AccordionDetails className={styles.accordionSelectForm}>
                                                                                                                     <div>
                                                                                                                         <FormControl sx={{ m: 1, minWidth: 250 }}>
@@ -1027,15 +1032,15 @@ export default function StandardCreate() {
                                                                                                                             >
                                                                                                                                 <MenuItem value="">Nenhum escolhido</MenuItem>
                                                                                                                                 {trait.subTrait.trait_specific?.spell_options?.from.options.map((item, index) => (
-                                                                                                                                    <MenuItem key={index} value={item.item.index}>{item.item.name}</MenuItem>
+                                                                                                                                    <MenuItem key={index} value={item.item.index}>{t(item.item.name)}</MenuItem>
                                                                                                                                 ))}
 
                                                                                                                             </Select>
                                                                                                                         </FormControl>
                                                                                                                     </div>
                                                                                                                     <div>
-                                                                                                                        <h5>Your choice:</h5>
-                                                                                                                        <p>{subTraitSpecificOptions}</p>
+                                                                                                                        <h5>Você escolheu:</h5>
+                                                                                                                        <p>{t(subTraitSpecificOptions)}</p>
                                                                                                                     </div>
 
                                                                                                                 </AccordionDetails>
@@ -1053,7 +1058,7 @@ export default function StandardCreate() {
                                                                                             <div>
                                                                                                 <h4>Incrimento no valor de habilidades</h4>
                                                                                                 <div>
-                                                                                                    <h5>A sub-raça {sub.subRace.name} concede os seguintes aumentos no valor de habilidades:</h5>
+                                                                                                    <h5>A sub-raça {t(sub.subRace.name)} concede os seguintes aumentos no valor de habilidades:</h5>
                                                                                                     {sub.subRace.ability_bonuses.map((attribute, index) => (
                                                                                                         <p key={index}>{attribute.bonus} ponto(s) em {t(attribute.ability_score.name)}</p>
                                                                                                     ))}
