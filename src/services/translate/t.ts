@@ -81,7 +81,7 @@ export function t(name: string): string {
         ['dragonborn', 'Draconato'],
         ['hill dwarf', 'Anão da Colina'],
         ['dwarf', 'Anão'],
-        ['Half-elf', 'Meio Elfo'],
+        ['Half-Elf', 'Meio Elfo'],
         ['high elf', 'Alto Elfo'],
         ['elf', 'Elfo'],
         ['rock gnome', 'Gnomo das Rochas'],

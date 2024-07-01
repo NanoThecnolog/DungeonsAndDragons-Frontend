@@ -85,9 +85,9 @@ interface SkillComponentProps {
 export interface ClassDataProps {
     name: string;
     data: {
-        class_levels: "/api/classes/paladin/levels"
-        hit_die: 10
-        index: "paladin"
+        class_levels: string
+        hit_die: number
+        index: string
         multi_classing: {
             prerequisites: [
                 {

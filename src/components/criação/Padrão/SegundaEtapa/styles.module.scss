@@ -1,0 +1,138 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    width: 950px;
+    border: 3px solid var(--color-text);
+    border-radius: 0.4rem;
+
+
+    .formItem {
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+
+        .cardRaceContainer {
+            display: flex;
+            flex-direction: column;
+            background-color: gray;
+            border-radius: 0.4rem;
+            margin: 0.2rem 0;
+
+            .cardRace {
+                display: flex;
+
+            }
+
+            .cardItem {
+                .cardSummary {
+                    display: flex;
+                    align-items: center;
+
+                    .raceName {
+                        padding: 0 1rem;
+                    }
+                }
+
+                .cardDetails {
+                    display: flex;
+
+                    .raceDesc {
+                        text-align: justify;
+                        padding: 1rem;
+
+                        p {
+                            padding: 0.5rem;
+                        }
+                    }
+
+                    .raceTraits {
+                        padding: 1rem;
+
+                        .traitDesc {
+                            padding: 0.5rem;
+                        }
+
+                    }
+
+
+
+                    .subRaceDesc {
+                        padding: 0.5rem 0;
+
+
+                    }
+
+                    .accordionSelectForm {
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .subTraitDesc {
+                        padding: 0.5rem 0;
+                    }
+                }
+
+
+                .raceSmallImage {
+                    border-radius: 0.4rem;
+                }
+            }
+        }
+
+    }
+
+    select {
+        width: 100%;
+        height: 40px;
+        border-radius: 0.3rem;
+        color: var(--color-text);
+        background-color: var(--inputBackground);
+        border: 1px solid var(--inputBackground);
+        padding: 0 0.5rem;
+        margin: 0.2rem 0;
+
+        &:focus {
+            padding: 0.5rem;
+        }
+
+    }
+
+}
+
+.traitTable {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    thead {
+        tr {
+            display: flex;
+            justify-content: space-between;
+
+            th {
+                width: 33%;
+                text-align: start;
+            }
+        }
+
+        width: 100%;
+    }
+}
+
+.trContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    td {
+        width: 33%;
+        text-align: start;
+        padding: 0.1rem 0;
+    }
+
+}
