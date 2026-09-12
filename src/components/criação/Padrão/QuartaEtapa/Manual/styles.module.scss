@@ -1,0 +1,26 @@
+.attributeContainer {
+    display: flex;
+    flex-direction: column;
+
+    .statusContainer {
+        display: flex;
+
+        padding: 1rem;
+
+        .status {
+            padding: 0 1rem;
+
+            input {
+                color: wheat;
+                // border: 1px solid wheat;
+
+            }
+
+            label {
+                color: wheat;
+            }
+        }
+    }
+
+
+}

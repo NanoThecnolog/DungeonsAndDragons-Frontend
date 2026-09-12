@@ -1,0 +1,39 @@
+.button {
+
+    background-color: var(--borgonha);
+    border: 0;
+    padding: 0.4rem;
+    margin: 0 0.5rem;
+    color: #fff;
+    border-radius: 0.5rem;
+    transition: all 0.5s ease;
+
+    &[disabled] {
+        cursor: not-allowed;
+
+        svg {
+            animation: animate 2s infinite;
+        }
+    }
+
+    &:hover {
+        filter: brightness(1.4);
+        transform: scale(1.1)
+    }
+
+}
+
+.buttonText {
+    color: #fff;
+}
+
+@keyframes animate {
+    from {
+        transform: rotate(0deg);
+
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

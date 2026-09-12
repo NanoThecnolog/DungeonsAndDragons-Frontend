@@ -1,0 +1,26 @@
+.resumeContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+
+    .image {
+        border-radius: 0.4rem;
+    }
+
+    .textContainer {
+        padding: 0.4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+    }
+
+    .attributesContainer {
+        display: flex;
+        flex-direction: column;
+
+    }
+}

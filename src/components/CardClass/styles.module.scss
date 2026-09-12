@@ -1,0 +1,120 @@
+.info {
+    width: 100%;
+    border: 3px solid var(--color-text);
+    border-radius: 0.4rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .classContainer {
+        border: 3px solid var(--color-text);
+        border-radius: 0.4rem;
+        padding: 0.4rem;
+        margin: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+
+        .nameDiceContainer {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+
+            h2 {
+                text-align: center;
+            }
+        }
+
+        .infoContainer {
+            margin: 1rem;
+            width: 100%;
+
+            h2 {
+                font-size: 3rem;
+            }
+
+            p {
+                font-size: 0.8rem;
+            }
+
+            .hitDice {
+                padding-top: 0.8rem;
+                text-align: center;
+                font-size: 1.2rem;
+            }
+
+            .lifeDice {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .conjuration {
+                width: 95%;
+                margin-top: 0.4rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                h4 {
+                    padding: 1rem 0;
+                    color: var(--verdeMenta);
+                }
+
+                .conjurationTypes {
+                    display: flex;
+                    padding: 0.5rem 0;
+
+                    .conjurationName {
+                        width: 10%;
+                        display: flex;
+                        align-items: flex-start;
+                    }
+
+                    .conjurationDesc {
+                        width: 90%;
+                        display: flex;
+                        align-items: center;
+                        font-style: italic;
+                        text-align: justify;
+                    }
+                }
+            }
+
+            .features {
+                h3 {
+                    font-size: 1.5rem;
+                }
+
+                .featureContainer {
+                    padding: 1rem;
+
+                    .featureName {
+                        font-size: 1.2rem;
+                        color: var(--verdeMenta);
+                    }
+
+                    .featureDesc {
+                        font-style: italic;
+                        text-align: justify;
+                        padding: 0 1rem 0 1rem;
+
+                        .featContainer {
+                            padding: 0.5rem;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+.row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}

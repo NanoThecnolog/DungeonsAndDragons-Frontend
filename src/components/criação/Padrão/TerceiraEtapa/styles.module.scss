@@ -1,0 +1,63 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    width: 950px;
+    border: 3px solid var(--color-text);
+    border-radius: 0.4rem;
+
+    .formItem {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .cardClassContainer {
+            display: flex;
+            flex-direction: column;
+            background-color: gray;
+            border-radius: 0.4rem;
+            margin: 0.2rem 0;
+
+            .cardItem {
+                .clardSummary {
+                    display: flex;
+                    align-items: center;
+
+                }
+
+                .className {
+                    padding: 0 1rem;
+                }
+
+                .cardDetails {
+                    display: flex;
+                    flex-direction: column;
+
+
+                    .cardLevelContainer {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        margin-top: 2rem;
+
+                        // .cardLevels {}
+                    }
+
+                    .content {
+                        padding-top: 3rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}

@@ -1,0 +1,147 @@
+.info {
+    width: 100%;
+
+    border: 3px solid var(--color-text);
+    border-radius: 0.4rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .racaContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+
+
+        .raca {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 0.5rem;
+
+            .subraca {
+
+                p {
+                    font-size: 0.8rem;
+                    font-style: italic;
+                    padding: 5px 0;
+                }
+            }
+        }
+
+        .traits {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+
+
+
+            .raceTraits {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+
+                .raceContainer {
+                    margin: 0 1rem;
+                    text-align: justify;
+
+                    p {
+                        font-size: 0.8rem;
+                    }
+
+                    span {
+                        font-style: italic;
+                        font-size: 0.8rem;
+                        text-align: justify;
+                    }
+
+                    .raceInfo {
+                        padding: 0.5rem 2rem 0.5rem 0;
+                    }
+
+                    .proficiencyContainer {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        padding-right: 2rem;
+
+
+                        .proficiencyBox {
+                            display: flex;
+                        }
+
+                        .proficiencyItem {
+                            margin: 0.2rem 0 0 0.5rem;
+                        }
+
+                        .proficiencyOptions {
+                            font-size: 0.8rem;
+                            font-style: italic;
+                            padding: 1rem 0 0 0.5rem;
+                            width: 70%;
+                            margin-left: auto;
+                        }
+                    }
+
+                    .traitsContainer {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: flex-start;
+                        padding-top: 0.5rem;
+
+                        span {
+                            font-size: 0.9rem;
+                            font-style: italic;
+                            text-align: justify;
+                        }
+                    }
+
+                    .skillContainer {
+                        display: flex;
+                        flex-direction: column;
+                        padding-top: 5rem;
+
+                        .skillOptionsContainer {
+                            h4 {
+                                padding-top: 0.5rem;
+                            }
+
+                            p {
+                                padding-top: 1rem 0;
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        .languagesTraits {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 100%;
+            margin-top: 0.5rem;
+
+            p {
+                font-size: 0.8rem;
+                font-style: italic;
+                text-align: justify;
+            }
+        }
+    }
+}
+
+.row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
