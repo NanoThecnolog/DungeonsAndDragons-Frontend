@@ -1,0 +1,18 @@
+{
+    "nav": {
+        "home": "Home"
+    },
+    "footer": {
+        "privacy": "Privacy Policy",
+        "faq": "Frequently asked questions",
+        "playerBook": "Player's Handbook",
+        "supporter": "Become a supporter",
+        "workWithUs": "Work with us",
+        "rights": "Copyright 2024. All rights reserved."
+    },
+    "lang": {
+        "title": "Language",
+        "pt": "Português",
+        "en": "English"
+    }
+}

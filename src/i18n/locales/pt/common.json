@@ -1,0 +1,18 @@
+{
+    "nav": {
+        "home": "Início"
+    },
+    "footer": {
+        "privacy": "Política de Privacidade",
+        "faq": "Perguntas frequentes",
+        "playerBook": "Livro do Jogador",
+        "supporter": "Seja um apoiador",
+        "workWithUs": "Trabalhe conosco",
+        "rights": "Copyright 2024. Todos os direitos reservados."
+    },
+    "lang": {
+        "title": "Idioma",
+        "pt": "Português",
+        "en": "English"
+    }
+}

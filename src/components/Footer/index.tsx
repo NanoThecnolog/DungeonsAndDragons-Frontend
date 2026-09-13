@@ -1,5 +1,6 @@
 "use client";
 import { useState, useContext } from "react";
+import { useTranslation } from "react-i18next";
 import styles from './styles.module.scss'
 import { FaCopyright } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
@@ -10,11 +11,13 @@ import { FaDiceD20 } from "react-icons/fa";
 
 import Link from "next/link";
 import { AuthContext } from "@/contexts/AuthContext";
+import LanguageSwitch from '@/components/ui/LanguageSwitch'
 
 export default function Footer() {
 
     const { isPlaying, volume, togglePlayPause, setVolume } = useContext(AuthContext);
     const volumePerCent = volume * 100
+    const { t } = useTranslation()
 
     return (
         <>
@@ -37,19 +40,20 @@ export default function Footer() {
                     </div>
 
                 </div>
+                <LanguageSwitch />
                 <div className={styles.footer}>
                     <div className={styles.informacao}>
-                        <div><p>Política de Privacidade</p></div>
-                        <div><p>Perguntas frequentes</p></div>
+                        <div><p>{t('footer.privacy')}</p></div>
+                        <div><p>{t('footer.faq')}</p></div>
                         <Link href='/livro-do-jogador.pdf' target="_blank" rel="noopener noreferrer">
                             <div>
-                                <p>Livro do Jogador</p>
+                                <p>{t('footer.playerBook')}</p>
                             </div>
                         </Link>
                     </div>
                     <div className={styles.informacao}>
-                        <div><p>Seja um apoiador</p></div>
-                        <div><p>Trabalhe conosco</p></div>
+                        <div><p>{t('footer.supporter')}</p></div>
+                        <div><p>{t('footer.workWithUs')}</p></div>
                     </div>
                     <div className={styles.informacao}>
                         <div>
@@ -67,7 +71,7 @@ export default function Footer() {
 
                     </div>
                     <div className={styles.copyRight}>
-                        <FaCopyright /> <span>Copyright 2024. Todos os direitos reservados.</span>
+                        <FaCopyright /> <span>{t('footer.rights')}</span>
                     </div>
 
                 </div>

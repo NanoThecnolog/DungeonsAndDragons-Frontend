@@ -23,7 +23,6 @@
     "jwt-decode": "^4.0.0",
     "next": "14.2.3",
     "next-google-fonts": "^2.2.0",
-    "next-i18next": "^15.3.0",
     "nookies": "^2.5.2",
     "react": "^18",
     "react-dom": "^18",

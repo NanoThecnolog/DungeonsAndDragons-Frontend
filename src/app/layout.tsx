@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
 import Footer from "@/components/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
+import I18nProvider from "@/i18n/I18nProvider";
 import AudioPlayer from "@/components/AudioPlayer";
 import ScrollToTop from "@/components/ui/ScrollToTop";
 
@@ -16,13 +17,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     return (
         <html lang="pt-br">
             <body>
-                <AuthProvider>
-                    <AudioPlayer />
-                    {children}
-                    <ToastContainer autoClose={3000} />
-                    <Footer />
-                    <ScrollToTop />
-                </AuthProvider>
+                <I18nProvider>
+                    <AuthProvider>
+                        <AudioPlayer />
+                        {children}
+                        <ToastContainer autoClose={3000} />
+                        <Footer />
+                        <ScrollToTop />
+                    </AuthProvider>
+                </I18nProvider>
             </body>
         </html>
     );
